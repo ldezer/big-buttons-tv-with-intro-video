@@ -1,0 +1,88 @@
+import { QuickPack } from './types';
+
+export const QUICK_PACKS: QuickPack[] = [
+  {
+    id: 'animals',
+    name: 'Animals',
+    description: 'Favorite animals to look up',
+    emoji: '🐾',
+    buttons: [
+      { label: 'Dogs', emoji: '🐕', color: '#1565C0', action: { type: 'choice', query: 'dogs' }, isFavorite: false, order: 0 },
+      { label: 'Cats', emoji: '🐈', color: '#D32F2F', action: { type: 'choice', query: 'cats' }, isFavorite: false, order: 1 },
+      { label: 'Birds', emoji: '🐦', color: '#F9A825', action: { type: 'choice', query: 'birds' }, isFavorite: false, order: 2 },
+      { label: 'Fish', emoji: '🐟', color: '#00838F', action: { type: 'choice', query: 'fish' }, isFavorite: false, order: 3 },
+      { label: 'Horses', emoji: '🐎', color: '#2E7D32', action: { type: 'choice', query: 'horses' }, isFavorite: false, order: 4 },
+      { label: 'Rabbits', emoji: '🐰', color: '#6A1B9A', action: { type: 'choice', query: 'rabbits' }, isFavorite: false, order: 5 },
+    ],
+  },
+  {
+    id: 'food',
+    name: 'Food & Drinks',
+    description: 'Common foods and drinks',
+    emoji: '🍎',
+    buttons: [
+      { label: 'Pizza', emoji: '🍕', color: '#D32F2F', action: { type: 'google-images', query: 'pizza' }, isFavorite: false, order: 0 },
+      { label: 'Fruit', emoji: '🍓', color: '#2E7D32', action: { type: 'google-images', query: 'fruit' }, isFavorite: false, order: 1 },
+      { label: 'Cookies', emoji: '🍪', color: '#F9A825', action: { type: 'google-images', query: 'cookies' }, isFavorite: false, order: 2 },
+      { label: 'Juice', emoji: '🧃', color: '#E65100', action: { type: 'google-images', query: 'juice' }, isFavorite: false, order: 3 },
+      { label: 'Sandwiches', emoji: '🥪', color: '#1565C0', action: { type: 'google-images', query: 'sandwiches' }, isFavorite: false, order: 4 },
+      { label: 'Ice Cream', emoji: '🍦', color: '#6A1B9A', action: { type: 'google-images', query: 'ice cream' }, isFavorite: false, order: 5 },
+    ],
+  },
+  {
+    id: 'activities',
+    name: 'Activities',
+    description: 'Fun things to do and watch',
+    emoji: '⚽',
+    buttons: [
+      { label: 'Music', emoji: '🎵', color: '#6A1B9A', action: { type: 'youtube', query: 'kids songs' }, isFavorite: false, order: 0 },
+      { label: 'Dancing', emoji: '💃', color: '#D32F2F', action: { type: 'youtube', query: 'fun dancing' }, isFavorite: false, order: 1 },
+      { label: 'Drawing', emoji: '🎨', color: '#1565C0', action: { type: 'youtube', query: 'easy drawing tutorial' }, isFavorite: false, order: 2 },
+      { label: 'Swimming', emoji: '🏊', color: '#00838F', action: { type: 'choice', query: 'swimming' }, isFavorite: false, order: 3 },
+      { label: 'Playground', emoji: '🛝', color: '#2E7D32', action: { type: 'choice', query: 'playground' }, isFavorite: false, order: 4 },
+      { label: 'Bubbles', emoji: '🫧', color: '#F9A825', action: { type: 'youtube', query: 'bubble play' }, isFavorite: false, order: 5 },
+    ],
+  },
+  {
+    id: 'emotions',
+    name: 'Feelings',
+    description: 'Express and explore emotions',
+    emoji: '😊',
+    buttons: [
+      { label: 'Happy', emoji: '😊', color: '#F9A825', action: { type: 'google-images', query: 'happy people smiling' }, isFavorite: false, order: 0 },
+      { label: 'Sad', emoji: '😢', color: '#1565C0', action: { type: 'google-images', query: 'sad feeling' }, isFavorite: false, order: 1 },
+      { label: 'Angry', emoji: '😠', color: '#D32F2F', action: { type: 'google-images', query: 'angry feeling' }, isFavorite: false, order: 2 },
+      { label: 'Scared', emoji: '😨', color: '#6A1B9A', action: { type: 'google-images', query: 'scared feeling' }, isFavorite: false, order: 3 },
+      { label: 'Tired', emoji: '😴', color: '#37474F', action: { type: 'google-images', query: 'tired sleepy' }, isFavorite: false, order: 4 },
+      { label: 'Excited', emoji: '🤩', color: '#E65100', action: { type: 'google-images', query: 'excited happy' }, isFavorite: false, order: 5 },
+    ],
+  },
+  {
+    id: 'places',
+    name: 'Places',
+    description: 'Familiar places to explore',
+    emoji: '🏠',
+    buttons: [
+      { label: 'Park', emoji: '🌳', color: '#2E7D32', action: { type: 'choice', query: 'park' }, isFavorite: false, order: 0 },
+      { label: 'Beach', emoji: '🏖️', color: '#00838F', action: { type: 'choice', query: 'beach' }, isFavorite: false, order: 1 },
+      { label: 'Zoo', emoji: '🦁', color: '#E65100', action: { type: 'choice', query: 'zoo animals' }, isFavorite: false, order: 2 },
+      { label: 'Library', emoji: '📚', color: '#1565C0', action: { type: 'google-images', query: 'library books' }, isFavorite: false, order: 3 },
+      { label: 'School', emoji: '🏫', color: '#F9A825', action: { type: 'google-images', query: 'school classroom' }, isFavorite: false, order: 4 },
+      { label: 'Store', emoji: '🛒', color: '#D32F2F', action: { type: 'google-images', query: 'grocery store' }, isFavorite: false, order: 5 },
+    ],
+  },
+  {
+    id: 'nature',
+    name: 'Nature',
+    description: 'Explore the natural world',
+    emoji: '🌿',
+    buttons: [
+      { label: 'Flowers', emoji: '🌸', color: '#D32F2F', action: { type: 'choice', query: 'flowers' }, isFavorite: false, order: 0 },
+      { label: 'Trees', emoji: '🌲', color: '#2E7D32', action: { type: 'choice', query: 'trees forest' }, isFavorite: false, order: 1 },
+      { label: 'Rain', emoji: '🌧️', color: '#1565C0', action: { type: 'choice', query: 'rain' }, isFavorite: false, order: 2 },
+      { label: 'Snow', emoji: '❄️', color: '#00838F', action: { type: 'choice', query: 'snow' }, isFavorite: false, order: 3 },
+      { label: 'Butterflies', emoji: '🦋', color: '#6A1B9A', action: { type: 'choice', query: 'butterflies' }, isFavorite: false, order: 4 },
+      { label: 'Stars', emoji: '⭐', color: '#F9A825', action: { type: 'choice', query: 'stars night sky' }, isFavorite: false, order: 5 },
+    ],
+  },
+];

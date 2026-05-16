@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   View, Text, ScrollView, Pressable, StyleSheet, Platform, Dimensions, ActivityIndicator, ImageBackground,
 } from 'react-native';
@@ -21,6 +21,7 @@ export default function LovedOneMode() {
   const { profileId } = useLocalSearchParams<{ profileId: string }>();
   const router = useRouter();
   const { getProfile } = useProfiles();
+  const [selectedLabel, setSelectedLabel] = useState('Use the remote arrows. Press OK to choose.');
   useKeepAwake();
   const profile = getProfile(profileId);
 
@@ -50,12 +51,19 @@ export default function LovedOneMode() {
     <>
       <View style={styles.topBar}>
         <Pressable hasTVPreferredFocus
-          style={({ pressed, focused }) => [styles.homeButton, focused && styles.tvFocused, pressed && styles.homeButtonPressed]} onPress={() => router.back()}>
+          style={({ pressed, focused }) => [styles.topButton, focused && styles.tvFocused, pressed && styles.topButtonPressed]}
+          onFocus={() => setSelectedLabel('Back')}
+          onPress={() => router.back()}>
           <IconSymbol name="arrow.left" size={22} color="#1565C0" />
-          <Text style={styles.homeButtonText}>Home</Text>
+          <Text style={styles.topButtonText}>Back</Text>
         </Pressable>
         <Text style={[styles.profileName, { color: profile.color }]}>{profile.emoji} {profile.name}</Text>
-        <View style={styles.topBarSpacer} />
+        <Pressable
+          style={({ pressed, focused }) => [styles.editButton, focused && styles.tvFocused, pressed && styles.editButtonPressed]}
+          onFocus={() => setSelectedLabel('Edit Profiles')}
+          onPress={() => router.push('/caregiver')}>
+          <Text style={styles.editButtonText}>Edit Profiles</Text>
+        </Pressable>
       </View>
 
       {bannerSource ? (
@@ -85,7 +93,7 @@ export default function LovedOneMode() {
               const artSource = remote ? { uri: remote } : getBundledButtonArt(button.bundledArtKey);
               const textColor = artSource ? '#FFFFFF' : getTextColor(button.color);
               return (
-                <Pressable key={button.id} style={({ pressed, focused }) => [styles.buttonWrap, { width: buttonSize, height: buttonSize }, focused && styles.tvFocused, pressed && styles.bigButtonPressed]} onPress={() => handleButtonPress(button)} accessibilityLabel={button.label}>
+                <Pressable key={button.id} style={({ pressed, focused }) => [styles.buttonWrap, { width: buttonSize, height: buttonSize }, focused && styles.tvFocused, pressed && styles.bigButtonPressed]} onFocus={() => setSelectedLabel(button.label)} onPress={() => handleButtonPress(button)} accessibilityLabel={button.label}>
                   {artSource ? (
                     <ImageBackground source={artSource} style={[styles.bigButton, { backgroundColor: button.color, width: buttonSize, height: buttonSize }]} imageStyle={styles.bigButtonImage}>
                       <View style={styles.imageButtonShade}><Text style={styles.buttonEmoji}>{button.emoji}</Text><Text style={[styles.buttonLabel, { color: textColor, fontSize }]} numberOfLines={2} adjustsFontSizeToFit>{button.label}</Text></View>
@@ -99,6 +107,9 @@ export default function LovedOneMode() {
           </View>
         </ScrollView>
       )}
+      <View style={styles.selectionBar}>
+        <Text style={styles.selectionText}>Remote Buddy: {selectedLabel}</Text>
+      </View>
     </>
   );
 
@@ -110,12 +121,14 @@ const styles = StyleSheet.create({
   fullBg: { flex: 1 },
   fullBgImage: { opacity: 0.12 },
   topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#E0E0E0', backgroundColor: '#FFFFFF' },
-  homeButton: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8, paddingHorizontal: 14, borderRadius: 50, borderWidth: 2, borderColor: '#1565C0', backgroundColor: '#FFFFFF' },
-  homeButtonPressed: { backgroundColor: '#E3F2FD' },
-  tvFocused: { borderWidth: 4, borderColor: '#FFD54F', transform: [{ scale: 1.03 }] },
-  homeButtonText: { fontSize: 15, fontWeight: '600', color: '#1565C0' },
+  topButton: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8, paddingHorizontal: 14, borderRadius: 50, borderWidth: 2, borderColor: '#1565C0', backgroundColor: '#FFFFFF' },
+  topButtonPressed: { backgroundColor: '#E3F2FD' },
+  editButton: { paddingVertical: 10, paddingHorizontal: 18, borderRadius: 50, backgroundColor: '#1565C0', borderWidth: 2, borderColor: '#1565C0' },
+  editButtonPressed: { opacity: 0.85 },
+  tvFocused: { borderWidth: 6, borderColor: '#FFD426', transform: [{ scale: 1.06 }], shadowColor: '#1565C0', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.9, shadowRadius: 14, elevation: 12 },
+  topButtonText: { fontSize: 15, fontWeight: '600', color: '#1565C0' },
+  editButtonText: { fontSize: 15, fontWeight: '900', color: '#FFFFFF' },
   profileName: { fontSize: 18, fontWeight: '700' },
-  topBarSpacer: { width: 90 },
   banner: { marginHorizontal: 16, marginTop: 16, borderRadius: 24, overflow: 'hidden', minHeight: 132 },
   bannerImage: { borderRadius: 24 },
   bannerShade: { flex: 1, backgroundColor: 'rgba(0,0,0,0.28)', padding: 18, justifyContent: 'flex-end' },
@@ -130,7 +143,7 @@ const styles = StyleSheet.create({
   avatarImageInner: { borderRadius: 20 },
   avatarFallback: { width: 64, height: 64, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
   avatarFallbackEmoji: { fontSize: 32 },
-  grid: { flexGrow: 1 },
+  grid: { flexGrow: 1, paddingBottom: 88 },
   gridRow: { flexDirection: 'row' },
   buttonWrap: { borderRadius: 20, overflow: 'hidden' },
   bigButton: { borderRadius: 20, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8, paddingVertical: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 6, overflow: 'hidden' },
@@ -143,4 +156,6 @@ const styles = StyleSheet.create({
   emptyEmoji: { fontSize: 64, marginBottom: 16 },
   emptyTitle: { fontSize: 24, fontWeight: '700', color: '#1A1A1A', marginBottom: 12 },
   emptyText: { fontSize: 16, color: '#757575', textAlign: 'center', lineHeight: 24 },
+  selectionBar: { position: 'absolute', left: 20, right: 20, bottom: 18, backgroundColor: '#FFFFFF', borderWidth: 4, borderColor: '#FFD426', borderRadius: 22, paddingVertical: 12, paddingHorizontal: 18, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.25, shadowRadius: 12, elevation: 10 },
+  selectionText: { fontSize: Platform.isTV ? 26 : 18, fontWeight: '900', color: '#1565C0', textAlign: 'center' },
 });

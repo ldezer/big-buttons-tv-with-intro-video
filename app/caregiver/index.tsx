@@ -22,6 +22,7 @@ export default function CaregiverDashboard() {
   const { profiles } = useProfiles();
   const { settings, isCaregiverUnlocked, unlockCaregiver } = useApp();
   const [showPin, setShowPin] = useState(!isCaregiverUnlocked && !!settings.caregiverPin);
+  const [selectedLabel, setSelectedLabel] = useState('Use remote arrows. Press OK to edit.');
 
   const handlePinSubmit = (pin: string) => {
     const success = unlockCaregiver(pin);
@@ -75,7 +76,8 @@ export default function CaregiverDashboard() {
       {/* Header */}
       <View style={styles.header}>
         <Pressable
-          style={({ pressed }) => [styles.backButton, pressed && styles.backButtonPressed]}
+          style={({ pressed, focused }) => [styles.backButton, focused && styles.tvFocused, pressed && styles.backButtonPressed]}
+          onFocus={() => setSelectedLabel('Back')}
           onPress={handleBack}
           accessibilityRole="button"
           accessibilityLabel="Go back"
@@ -84,7 +86,8 @@ export default function CaregiverDashboard() {
         </Pressable>
         <Text style={styles.headerTitle}>Caregiver Setup</Text>
         <Pressable
-          style={({ pressed }) => [styles.settingsButton, pressed && styles.settingsButtonPressed]}
+          style={({ pressed, focused }) => [styles.settingsButton, focused && styles.tvFocused, pressed && styles.settingsButtonPressed]}
+          onFocus={() => setSelectedLabel('Settings')}
           onPress={handleSettings}
           accessibilityRole="button"
           accessibilityLabel="Open settings"
@@ -99,7 +102,9 @@ export default function CaregiverDashboard() {
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Profiles</Text>
             <Pressable
-              style={({ pressed }) => [styles.addButton, pressed && styles.addButtonPressed]}
+              style={({ pressed, focused }) => [styles.addButton, focused && styles.tvFocused, pressed && styles.addButtonPressed]}
+              hasTVPreferredFocus
+              onFocus={() => setSelectedLabel('Add Profile')}
               onPress={handleAddProfile}
               accessibilityRole="button"
               accessibilityLabel="Add new profile"
@@ -131,7 +136,8 @@ export default function CaregiverDashboard() {
                   </View>
                   <View style={styles.profileCardActions}>
                     <Pressable
-                      style={({ pressed }) => [styles.cardAction, pressed && styles.cardActionPressed]}
+                      style={({ pressed, focused }) => [styles.cardAction, focused && styles.tvFocused, pressed && styles.cardActionPressed]}
+                      onFocus={() => setSelectedLabel(`Buttons for ${profile.name}`)}
                       onPress={() => handleEditButtons(profile)}
                       accessibilityRole="button"
                       accessibilityLabel={`Edit buttons for ${profile.name}`}
@@ -140,7 +146,8 @@ export default function CaregiverDashboard() {
                       <Text style={styles.cardActionText}>Buttons</Text>
                     </Pressable>
                     <Pressable
-                      style={({ pressed }) => [styles.cardAction, pressed && styles.cardActionPressed]}
+                      style={({ pressed, focused }) => [styles.cardAction, focused && styles.tvFocused, pressed && styles.cardActionPressed]}
+                      onFocus={() => setSelectedLabel(`Edit ${profile.name}`)}
                       onPress={() => handleEditProfile(profile)}
                       accessibilityRole="button"
                       accessibilityLabel={`Edit profile for ${profile.name}`}
@@ -159,7 +166,8 @@ export default function CaregiverDashboard() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Quick Packs</Text>
           <Pressable
-            style={({ pressed }) => [styles.quickPacksCard, pressed && styles.quickPacksCardPressed]}
+            style={({ pressed, focused }) => [styles.quickPacksCard, focused && styles.tvFocused, pressed && styles.quickPacksCardPressed]}
+            onFocus={() => setSelectedLabel('Quick Packs')}
             onPress={handleQuickPacks}
             accessibilityRole="button"
             accessibilityLabel="Browse quick packs"
@@ -175,6 +183,7 @@ export default function CaregiverDashboard() {
           </Pressable>
         </View>
       </ScrollView>
+      <View style={styles.selectionBar}><Text style={styles.selectionText}>Remote Buddy: {selectedLabel}</Text></View>
     </ScreenContainer>
   );
 }
@@ -356,5 +365,35 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#757575',
     marginTop: 2,
+  },
+  tvFocused: {
+    borderWidth: 5,
+    borderColor: '#FFD426',
+    transform: [{ scale: 1.04 }],
+    shadowColor: '#1565C0',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.9,
+    shadowRadius: 12,
+    elevation: 12,
+  },
+  selectionBar: {
+    position: 'absolute',
+    left: 20,
+    right: 20,
+    bottom: 16,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 4,
+    borderColor: '#FFD426',
+    borderRadius: 22,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    alignItems: 'center',
+    elevation: 10,
+  },
+  selectionText: {
+    fontSize: Platform.isTV ? 24 : 17,
+    fontWeight: '900',
+    color: '#1565C0',
+    textAlign: 'center',
   },
 });

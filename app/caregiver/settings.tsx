@@ -8,6 +8,7 @@ import {
   Platform,
   Alert,
   TextInput,
+  Image,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -64,7 +65,7 @@ export default function SettingsScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Pressable
-          style={({ pressed }) => [styles.headerBtn, pressed && styles.headerBtnPressed]}
+          style={({ pressed, focused }) => [styles.headerBtn, focused && styles.tvFocusedSmall, pressed && styles.headerBtnPressed]}
           onPress={() => router.back()}
         >
           <IconSymbol name="arrow.left" size={22} color="#1565C0" />
@@ -153,7 +154,7 @@ export default function SettingsScreen() {
           {!showPinSetup ? (
             <View style={styles.pinActions}>
               <Pressable
-                style={({ pressed }) => [styles.pinButton, pressed && styles.pinButtonPressed]}
+                style={({ pressed, focused }) => [styles.pinButton, focused && styles.tvFocused, pressed && styles.pinButtonPressed]}
                 onPress={() => setShowPinSetup(true)}
               >
                 <IconSymbol name="lock.fill" size={18} color="#FFFFFF" />
@@ -163,7 +164,7 @@ export default function SettingsScreen() {
               </Pressable>
               {settings.caregiverPin && (
                 <Pressable
-                  style={({ pressed }) => [styles.removePinButton, pressed && styles.removePinButtonPressed]}
+                  style={({ pressed, focused }) => [styles.removePinButton, focused && styles.tvFocused, pressed && styles.removePinButtonPressed]}
                   onPress={handleRemovePin}
                 >
                   <IconSymbol name="lock.open.fill" size={18} color="#D32F2F" />
@@ -198,13 +199,13 @@ export default function SettingsScreen() {
               />
               <View style={styles.pinSetupActions}>
                 <Pressable
-                  style={({ pressed }) => [styles.pinButton, pressed && styles.pinButtonPressed]}
+                  style={({ pressed, focused }) => [styles.pinButton, focused && styles.tvFocused, pressed && styles.pinButtonPressed]}
                   onPress={handleSetPin}
                 >
                   <Text style={styles.pinButtonText}>Save PIN</Text>
                 </Pressable>
                 <Pressable
-                  style={({ pressed }) => [styles.cancelBtn, pressed && styles.cancelBtnPressed]}
+                  style={({ pressed, focused }) => [styles.cancelBtn, focused && styles.tvFocused, pressed && styles.cancelBtnPressed]}
                   onPress={() => { setShowPinSetup(false); setNewPin(''); setConfirmPin(''); }}
                 >
                   <Text style={styles.cancelBtnText}>Cancel</Text>
@@ -218,7 +219,7 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>About Big Buttons</Text>
           <View style={styles.aboutCard}>
-            <Text style={styles.aboutTitle}>🔵 Big Buttons</Text>
+            <Image source={require('@/assets/images/custom/big-buttons-logo.jpg')} style={styles.aboutLogo} resizeMode="contain" />
             <Text style={styles.aboutText}>
               A caregiver-made giant-button launcher for autistic users, people with I/DD, elderly users, and anyone who benefits from simple, accessible technology.
             </Text>
@@ -415,12 +416,15 @@ const styles = StyleSheet.create({
     color: '#757575',
     fontWeight: '500',
   },
+  tvFocused: { borderWidth: 5, borderColor: '#E53935', shadowColor: '#FFFFFF', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 16, elevation: 16, transform: [{ scale: 1.03 }] },
+  tvFocusedSmall: { borderWidth: 4, borderColor: '#E53935', shadowColor: '#FFFFFF', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 12, elevation: 14, transform: [{ scale: 1.08 }] },
   aboutCard: {
     backgroundColor: '#F5F5F5',
     borderRadius: 16,
     padding: 20,
     gap: 8,
   },
+  aboutLogo: { width: 260, height: 130, alignSelf: 'center' },
   aboutTitle: {
     fontSize: 20,
     fontWeight: '800',

@@ -154,9 +154,7 @@ export default function ButtonsEditor() {
             return (
               <View key={button.id} style={styles.buttonRow}>
                 {artSource ? (
-                  <ImageBackground source={artSource} style={[styles.buttonPreview, { backgroundColor: button.color }]} imageStyle={styles.buttonPreviewImage}>
-                    <View style={styles.buttonPreviewShade}><Text style={styles.buttonPreviewEmoji}>{button.emoji}</Text></View>
-                  </ImageBackground>
+                  <ImageBackground source={artSource} style={[styles.buttonPreview, { backgroundColor: '#FFFFFF' }]} imageStyle={styles.buttonPreviewImage} resizeMode="cover" />
                 ) : (
                   <View style={[styles.buttonPreview, { backgroundColor: button.color }]}>
                     <Text style={styles.buttonPreviewEmoji}>{button.emoji}</Text>
@@ -210,7 +208,6 @@ export default function ButtonsEditor() {
           })}
         </ScrollView>
       )}
-      <View style={styles.selectionBar}><Text style={styles.selectionText}>Remote Buddy: {selectedLabel}</Text></View>
     </ScreenContainer>
   );
 }
@@ -316,7 +313,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.16)',
+    backgroundColor: 'transparent',
   },
   buttonPreviewEmoji: {
     fontSize: 28,
@@ -386,18 +383,18 @@ const styles = StyleSheet.create({
   },
   tvFocused: {
     borderWidth: 5,
-    borderColor: '#FFD426',
+    borderColor: '#E53935',
     transform: [{ scale: 1.04 }],
-    shadowColor: '#1565C0',
+    shadowColor: '#FFFFFF',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,
     shadowRadius: 12,
     elevation: 12,
   },
   tvFocusedSmall: {
-    backgroundColor: '#FFF8E1',
+    backgroundColor: '#FFFFFF',
     borderWidth: 4,
-    borderColor: '#FFD426',
+    borderColor: '#E53935',
     transform: [{ scale: 1.12 }],
     elevation: 12,
   },
@@ -408,7 +405,7 @@ const styles = StyleSheet.create({
     bottom: 16,
     backgroundColor: '#FFFFFF',
     borderWidth: 4,
-    borderColor: '#FFD426',
+    borderColor: '#E53935',
     borderRadius: 22,
     paddingVertical: 10,
     paddingHorizontal: 18,

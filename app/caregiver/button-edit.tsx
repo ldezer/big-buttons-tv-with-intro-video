@@ -111,11 +111,11 @@ export default function ButtonEditScreen() {
   return (
     <ScreenContainer containerClassName="bg-white" edges={['top', 'left', 'right', 'bottom']}>
       <View style={styles.header}>
-        <Pressable style={({ pressed }) => [styles.headerBtn, pressed && styles.headerBtnPressed]} onPress={() => router.back()}>
+        <Pressable style={({ pressed, focused }) => [styles.headerBtn, focused && styles.tvFocused, pressed && styles.headerBtnPressed]} onPress={() => router.back()}>
           <Text style={styles.headerBtnText}>Cancel</Text>
         </Pressable>
         <Text style={styles.headerTitle}>{existing ? 'Edit Button' : 'New Button'}</Text>
-        <Pressable style={({ pressed }) => [styles.saveBtn, pressed && styles.saveBtnPressed]} onPress={handleSave}>
+        <Pressable style={({ pressed, focused }) => [styles.saveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed]} onPress={handleSave}>
           <Text style={styles.saveBtnText}>Save</Text>
         </Pressable>
       </View>
@@ -123,10 +123,9 @@ export default function ButtonEditScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.previewContainer}>
           {previewSource ? (
-            <ImageBackground source={previewSource} imageStyle={styles.previewImage} style={[styles.previewButton, { backgroundColor: color }]}>
-              <View style={styles.overlay}>
-                <Text style={styles.previewEmoji}>{emoji}</Text>
-                <Text style={[styles.previewLabel, { color: '#FFFFFF' }]} numberOfLines={2}>{label || 'Button Label'}</Text>
+            <ImageBackground source={previewSource} imageStyle={styles.previewImage} style={[styles.previewButton, { backgroundColor: '#FFFFFF' }]} resizeMode="cover">
+              <View style={styles.previewLabelPill}>
+                <Text style={[styles.previewLabel, { color: '#1565C0' }]} numberOfLines={1}>{label || 'Button Label'}</Text>
               </View>
             </ImageBackground>
           ) : (
@@ -143,10 +142,10 @@ export default function ButtonEditScreen() {
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>Button Emoji</Text>
+          <Text style={styles.label}>Button Emoji (replaces button art)</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.emojiRow}>
             {BUTTON_EMOJIS.map(e => (
-              <Pressable key={e} style={({ pressed }) => [styles.emojiOption, emoji === e && styles.emojiOptionSelected, pressed && styles.emojiOptionPressed]} onPress={() => setEmoji(e)}>
+              <Pressable key={e} style={({ pressed, focused }) => [styles.emojiOption, focused && styles.tvFocusedSmall, emoji === e && styles.emojiOptionSelected, pressed && styles.emojiOptionPressed]} onPress={() => { setEmoji(e); setBundledArtKey(''); setImageUri(''); }}>
                 <Text style={styles.emojiOptionText}>{e}</Text>
               </Pressable>
             ))}
@@ -157,7 +156,7 @@ export default function ButtonEditScreen() {
           <Text style={styles.label}>Button Color</Text>
           <View style={styles.colorRow}>
             {BUTTON_COLORS.map(c => (
-              <Pressable key={c} style={({ pressed }) => [styles.colorOption, { backgroundColor: c }, color === c && styles.colorOptionSelected, pressed && styles.colorOptionPressed]} onPress={() => setColor(c)}>
+              <Pressable key={c} style={({ pressed, focused }) => [styles.colorOption, focused && styles.tvFocusedSmall, { backgroundColor: c }, color === c && styles.colorOptionSelected, pressed && styles.colorOptionPressed]} onPress={() => setColor(c)}>
                 {color === c && <IconSymbol name="checkmark" size={18} color="#FFFFFF" />}
               </Pressable>
             ))}
@@ -174,7 +173,7 @@ export default function ButtonEditScreen() {
           <Text style={styles.label}>Bundled Art Slot</Text>
           <View style={styles.optionList}>
             {BUTTON_ART_OPTIONS.map(option => (
-              <Pressable key={option.key || 'none'} style={({ pressed }) => [styles.actionTypeOption, bundledArtKey === option.key && styles.actionTypeOptionSelected, pressed && styles.actionTypeOptionPressed]} onPress={() => setBundledArtKey(option.key)}>
+              <Pressable key={option.key || 'none'} style={({ pressed, focused }) => [styles.actionTypeOption, focused && styles.tvFocused, bundledArtKey === option.key && styles.actionTypeOptionSelected, pressed && styles.actionTypeOptionPressed]} onPress={() => setBundledArtKey(option.key)}>
                 <Text style={styles.actionTypeLabel}>{option.label}</Text>
               </Pressable>
             ))}
@@ -186,7 +185,7 @@ export default function ButtonEditScreen() {
           <Text style={styles.label}>What happens when tapped?</Text>
           <View style={styles.actionTypeList}>
             {ACTION_TYPES.map(at => (
-              <Pressable key={at.type} style={({ pressed }) => [styles.actionTypeOption, actionType === at.type && styles.actionTypeOptionSelected, pressed && styles.actionTypeOptionPressed]} onPress={() => setActionType(at.type)}>
+              <Pressable key={at.type} style={({ pressed, focused }) => [styles.actionTypeOption, focused && styles.tvFocused, actionType === at.type && styles.actionTypeOptionSelected, pressed && styles.actionTypeOptionPressed]} onPress={() => setActionType(at.type)}>
                 <Text style={styles.actionTypeEmoji}>{at.emoji}</Text>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.actionTypeLabel}>{at.label}</Text>
@@ -208,6 +207,11 @@ export default function ButtonEditScreen() {
             <TextInput style={styles.input} value={url} onChangeText={setUrl} placeholder="https://example.com" autoCapitalize="none" keyboardType="url" placeholderTextColor="#BDBDBD" />
           </View>
         )}
+
+
+        <Pressable style={({ pressed, focused }) => [styles.bottomSaveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed]} onPress={handleSave}>
+          <Text style={styles.bottomSaveBtnText}>Save Button</Text>
+        </Pressable>
       </ScrollView>
     </ScreenContainer>
   );
@@ -222,11 +226,16 @@ const styles = StyleSheet.create({
   saveBtn: { backgroundColor: '#1565C0', paddingVertical: 8, paddingHorizontal: 20, borderRadius: 50 },
   saveBtnPressed: { opacity: 0.8 },
   saveBtnText: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
+  tvFocused: { borderWidth: 5, borderColor: '#E53935', shadowColor: '#FFFFFF', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 16, elevation: 16, transform: [{ scale: 1.03 }] },
+  tvFocusedSmall: { borderWidth: 4, borderColor: '#E53935', shadowColor: '#FFFFFF', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 12, elevation: 14, transform: [{ scale: 1.08 }] },
+  bottomSaveBtn: { marginTop: 8, marginBottom: 24, backgroundColor: '#D32F2F', paddingVertical: 18, borderRadius: 18, alignItems: 'center', borderWidth: 3, borderColor: '#FFFFFF' },
+  bottomSaveBtnText: { color: '#FFFFFF', fontSize: 22, fontWeight: '900' },
   content: { padding: 20, gap: 24, paddingBottom: 48 },
   previewContainer: { alignItems: 'center', paddingVertical: 8 },
   previewButton: { width: 160, height: 160, borderRadius: 22, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 6 },
   previewImage: { borderRadius: 22 },
-  overlay: { flex: 1, alignItems: 'center', justifyContent: 'flex-end', padding: 12, backgroundColor: 'rgba(0,0,0,0.28)' },
+  overlay: { flex: 1, alignItems: 'center', justifyContent: 'flex-end', padding: 12, backgroundColor: 'transparent' },
+  previewLabelPill: { position: 'absolute', left: 10, right: 10, bottom: 10, backgroundColor: 'rgba(255,255,255,0.96)', borderWidth: 3, borderColor: '#E53935', borderRadius: 16, paddingVertical: 8, paddingHorizontal: 10, alignItems: 'center' },
   previewEmoji: { fontSize: 44, marginBottom: 8, lineHeight: 52 },
   previewLabel: { fontSize: 18, fontWeight: '700', textAlign: 'center', lineHeight: 22 },
   field: { gap: 10 },

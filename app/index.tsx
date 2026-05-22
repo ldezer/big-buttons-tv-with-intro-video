@@ -108,7 +108,7 @@ export default function ModeSelector() {
 
   return (
     <View style={[styles.screen, isLandscape && styles.screenLandscape]}>
-      <Image source={require('@/assets/images/splash-icon.png')} style={styles.loadingLogo} resizeMode="contain" />
+      <Image source={require('@/assets/images/custom/big-buttons-logo.jpg')} style={styles.loadingLogo} resizeMode="contain" />
       <ActivityIndicator size="large" color="#1565C0" />
       <Text style={styles.loadingText}>Opening Big Buttons...</Text>
     </View>

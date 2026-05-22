@@ -183,7 +183,6 @@ export default function CaregiverDashboard() {
           </Pressable>
         </View>
       </ScrollView>
-      <View style={styles.selectionBar}><Text style={styles.selectionText}>Remote Buddy: {selectedLabel}</Text></View>
     </ScreenContainer>
   );
 }
@@ -368,9 +367,9 @@ const styles = StyleSheet.create({
   },
   tvFocused: {
     borderWidth: 5,
-    borderColor: '#FFD426',
+    borderColor: '#E53935',
     transform: [{ scale: 1.04 }],
-    shadowColor: '#1565C0',
+    shadowColor: '#FFFFFF',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,
     shadowRadius: 12,
@@ -383,7 +382,7 @@ const styles = StyleSheet.create({
     bottom: 16,
     backgroundColor: '#FFFFFF',
     borderWidth: 4,
-    borderColor: '#FFD426',
+    borderColor: '#E53935',
     borderRadius: 22,
     paddingVertical: 10,
     paddingHorizontal: 18,

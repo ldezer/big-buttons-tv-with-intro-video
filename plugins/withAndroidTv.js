@@ -79,11 +79,15 @@ function withAndroidTvBanner(config) {
     async (config) => {
       const projectRoot = config.modRequest.projectRoot;
       const src = path.join(projectRoot, 'assets', 'images', 'tv_banner.png');
-      const drawableDir = path.join(projectRoot, 'android', 'app', 'src', 'main', 'res', 'drawable');
-      const dest = path.join(drawableDir, 'tv_banner.png');
+      const drawableDirs = [
+        path.join(projectRoot, 'android', 'app', 'src', 'main', 'res', 'drawable'),
+        path.join(projectRoot, 'android', 'app', 'src', 'main', 'res', 'drawable-nodpi'),
+      ];
       if (fs.existsSync(src)) {
-        fs.mkdirSync(drawableDir, { recursive: true });
-        fs.copyFileSync(src, dest);
+        for (const drawableDir of drawableDirs) {
+          fs.mkdirSync(drawableDir, { recursive: true });
+          fs.copyFileSync(src, path.join(drawableDir, 'tv_banner.png'));
+        }
       }
       return config;
     },

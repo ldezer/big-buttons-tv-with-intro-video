@@ -44,7 +44,7 @@ var config = {
     icon: "./assets/images/icon.png",
     scheme: env.scheme,
     userInterfaceStyle: "automatic",
-    newArchEnabled: false,
+    newArchEnabled: true,
     ios: {
         supportsTablet: true,
         bundleIdentifier: env.iosBundleId,
@@ -53,6 +53,8 @@ var config = {
         }
     },
     android: {
+        icon: "./assets/images/icon.png",
+        banner: "./assets/images/tv_banner.png",
         adaptiveIcon: {
             backgroundColor: "#E6F4FE",
             foregroundImage: "./assets/images/android-icon-foreground.png",
@@ -89,13 +91,6 @@ var config = {
             "expo-audio",
             {
                 microphonePermission: "Allow $(PRODUCT_NAME) to access your microphone.",
-            },
-        ],
-        [
-            "expo-video",
-            {
-                supportsBackgroundPlayback: true,
-                supportsPictureInPicture: true,
             },
         ],
         [

@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, TextInput, ScrollView, Pressable, StyleSheet, Platform, Alert, ImageBackground } from 'react-native';
+import { View, Text, TextInput, ScrollView, StyleSheet, Platform, Alert, ImageBackground } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { ScreenContainer } from '@/components/screen-container';
 import { useProfiles } from '@/lib/profiles-context';
 import { useApp } from '@/lib/app-context';
 import { PROFILE_COLORS, ProfileSettings, FontSize, ColumnCount } from '@/lib/types';
+import { TVPressable } from '@/components/tv/tv-pressable';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { PROFILE_AVATAR_OPTIONS, PROFILE_BANNER_OPTIONS, cleanImageUri, getBundledProfileArt } from '@/lib/art';
 
@@ -51,9 +52,9 @@ export default function ProfileEditScreen() {
   return (
     <ScreenContainer containerClassName="bg-white" edges={['top','left','right','bottom']}>
       <View style={styles.header}>
-        <Pressable style={({ pressed, focused }) => [styles.headerBtn, focused && styles.tvFocused, pressed && styles.headerBtnPressed]} onPress={() => router.back()}><Text style={styles.headerBtnText}>Cancel</Text></Pressable>
+        <TVPressable style={({ pressed, focused }) => [styles.headerBtn, focused && styles.tvFocused, pressed && styles.headerBtnPressed]} onPress={() => router.back()}><Text style={styles.headerBtnText}>Cancel</Text></TVPressable>
         <Text style={styles.headerTitle}>{existing ? 'Edit Profile' : 'New Profile'}</Text>
-        <Pressable style={({ pressed, focused }) => [styles.headerBtn, styles.saveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed]} onPress={handleSave}><Text style={styles.saveBtnText}>Save</Text></Pressable>
+        <TVPressable style={({ pressed, focused }) => [styles.headerBtn, styles.saveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed]} onPress={handleSave}><Text style={styles.saveBtnText}>Save Profile</Text></TVPressable>
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
@@ -63,28 +64,28 @@ export default function ProfileEditScreen() {
 
         <View style={styles.field}><Text style={styles.label}>Name</Text><TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Enter name..." placeholderTextColor="#BDBDBD" maxLength={30} /></View>
 
-        <View style={styles.field}><Text style={styles.label}>Avatar Emoji</Text><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.emojiRow}>{PROFILE_EMOJIS.map(e => <Pressable key={e} style={({ pressed, focused }) => [styles.emojiOption, focused && styles.tvFocusedSmall, emoji === e && styles.emojiOptionSelected, pressed && styles.emojiOptionPressed]} onPress={() => setEmoji(e)}><Text style={styles.emojiOptionText}>{e}</Text></Pressable>)}</ScrollView></View>
+        <View style={styles.field}><Text style={styles.label}>Avatar Emoji</Text><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.emojiRow}>{PROFILE_EMOJIS.map(e => <TVPressable key={e} style={({ pressed, focused }) => [styles.emojiOption, focused && styles.tvFocusedSmall, emoji === e && styles.emojiOptionSelected, pressed && styles.emojiOptionPressed]} onPress={() => setEmoji(e)}><Text style={styles.emojiOptionText}>{e}</Text></TVPressable>)}</ScrollView></View>
 
-        <View style={styles.field}><Text style={styles.label}>Profile Color</Text><View style={styles.colorRow}>{PROFILE_COLORS.map(c => <Pressable key={c} style={({ pressed, focused }) => [styles.colorOption, focused && styles.tvFocusedSmall, { backgroundColor: c }, color === c && styles.colorOptionSelected, pressed && styles.colorOptionPressed]} onPress={() => setColor(c)}>{color === c && <IconSymbol name="checkmark" size={18} color="#FFFFFF" />}</Pressable>)}</View></View>
+        <View style={styles.field}><Text style={styles.label}>Profile Color</Text><View style={styles.colorRow}>{PROFILE_COLORS.map(c => <TVPressable key={c} style={({ pressed, focused }) => [styles.colorOption, focused && styles.tvFocusedSmall, { backgroundColor: c }, color === c && styles.colorOptionSelected, pressed && styles.colorOptionPressed]} onPress={() => setColor(c)}>{color === c && <IconSymbol name="checkmark" size={18} color="#FFFFFF" />}</TVPressable>)}</View></View>
 
         <View style={styles.field}><Text style={styles.label}>Avatar Image URL (optional)</Text><TextInput style={styles.input} value={avatarImageUri} onChangeText={setAvatarImageUri} placeholder="https://..." autoCapitalize="none" keyboardType="url" placeholderTextColor="#BDBDBD" /></View>
-        <View style={styles.field}><Text style={styles.label}>Bundled Avatar Slot</Text><View style={styles.segmentWrap}>{PROFILE_AVATAR_OPTIONS.map(option => <Pressable key={option.key || 'none'} style={({ pressed, focused }) => [styles.segment, focused && styles.tvFocused, avatarBundledArtKey === option.key && styles.segmentActive, pressed && styles.segmentPressed]} onPress={() => setAvatarBundledArtKey(option.key)}><Text style={[styles.segmentText, avatarBundledArtKey === option.key && styles.segmentTextActive]}>{option.label}</Text></Pressable>)}</View></View>
+        <View style={styles.field}><Text style={styles.label}>Bundled Avatar Slot</Text><View style={styles.segmentWrap}>{PROFILE_AVATAR_OPTIONS.map(option => <TVPressable key={option.key || 'none'} style={({ pressed, focused }) => [styles.segment, focused && styles.tvFocused, avatarBundledArtKey === option.key && styles.segmentActive, pressed && styles.segmentPressed]} onPress={() => setAvatarBundledArtKey(option.key)}><Text style={[styles.segmentText, avatarBundledArtKey === option.key && styles.segmentTextActive]}>{option.label}</Text></TVPressable>)}</View></View>
 
         <View style={styles.field}><Text style={styles.label}>Banner Image URL (optional)</Text><TextInput style={styles.input} value={bannerImageUri} onChangeText={setBannerImageUri} placeholder="https://..." autoCapitalize="none" keyboardType="url" placeholderTextColor="#BDBDBD" /></View>
-        <View style={styles.field}><Text style={styles.label}>Bundled Banner Slot</Text><View style={styles.segmentWrap}>{PROFILE_BANNER_OPTIONS.map(option => <Pressable key={option.key || 'none'} style={({ pressed, focused }) => [styles.segment, focused && styles.tvFocused, bannerBundledArtKey === option.key && styles.segmentActive, pressed && styles.segmentPressed]} onPress={() => setBannerBundledArtKey(option.key)}><Text style={[styles.segmentText, bannerBundledArtKey === option.key && styles.segmentTextActive]}>{option.label}</Text></Pressable>)}</View></View>
+        <View style={styles.field}><Text style={styles.label}>Bundled Banner Slot</Text><View style={styles.segmentWrap}>{PROFILE_BANNER_OPTIONS.map(option => <TVPressable key={option.key || 'none'} style={({ pressed, focused }) => [styles.segment, focused && styles.tvFocused, bannerBundledArtKey === option.key && styles.segmentActive, pressed && styles.segmentPressed]} onPress={() => setBannerBundledArtKey(option.key)}><Text style={[styles.segmentText, bannerBundledArtKey === option.key && styles.segmentTextActive]}>{option.label}</Text></TVPressable>)}</View></View>
 
         <View style={styles.field}><Text style={styles.label}>Page Background Image URL (optional)</Text><TextInput style={styles.input} value={backgroundImageUri} onChangeText={setBackgroundImageUri} placeholder="https://..." autoCapitalize="none" keyboardType="url" placeholderTextColor="#BDBDBD" /><Text style={styles.help}>This sits behind the big buttons screen very lightly.</Text></View>
 
-        <View style={styles.field}><Text style={styles.label}>Button Text Size</Text><View style={styles.segmentWrap}>{(['large','xlarge','xxlarge'] as FontSize[]).map(fs => <Pressable key={fs} style={({ pressed, focused }) => [styles.segment, focused && styles.tvFocused, fontSize === fs && styles.segmentActive, pressed && styles.segmentPressed]} onPress={() => setFontSize(fs)}><Text style={[styles.segmentText, fontSize === fs && styles.segmentTextActive]}>{fs === 'large' ? 'Large' : fs === 'xlarge' ? 'X-Large' : 'XX-Large'}</Text></Pressable>)}</View></View>
+        <View style={styles.field}><Text style={styles.label}>Button Text Size</Text><View style={styles.segmentWrap}>{(['large','xlarge','xxlarge'] as FontSize[]).map(fs => <TVPressable key={fs} style={({ pressed, focused }) => [styles.segment, focused && styles.tvFocused, fontSize === fs && styles.segmentActive, pressed && styles.segmentPressed]} onPress={() => setFontSize(fs)}><Text style={[styles.segmentText, fontSize === fs && styles.segmentTextActive]}>{fs === 'large' ? 'Large' : fs === 'xlarge' ? 'X-Large' : 'XX-Large'}</Text></TVPressable>)}</View></View>
 
-        <View style={styles.field}><Text style={styles.label}>Button Columns</Text><View style={styles.segmentWrap}>{([1,2,3] as ColumnCount[]).map(c => <Pressable key={c} style={({ pressed, focused }) => [styles.segment, focused && styles.tvFocused, columns === c && styles.segmentActive, pressed && styles.segmentPressed]} onPress={() => setColumns(c)}><Text style={[styles.segmentText, columns === c && styles.segmentTextActive]}>{c} {c === 1 ? 'Column' : 'Columns'}</Text></Pressable>)}</View></View>
+        <View style={styles.field}><Text style={styles.label}>Button Columns</Text><View style={styles.segmentWrap}>{([1,2,3] as ColumnCount[]).map(c => <TVPressable key={c} style={({ pressed, focused }) => [styles.segment, focused && styles.tvFocused, columns === c && styles.segmentActive, pressed && styles.segmentPressed]} onPress={() => setColumns(c)}><Text style={[styles.segmentText, columns === c && styles.segmentTextActive]}>{c} {c === 1 ? 'Column' : 'Columns'}</Text></TVPressable>)}</View></View>
 
-        <View style={styles.field}><View style={styles.toggleRow}><View style={styles.toggleInfo}><Text style={styles.label}>Spoken Labels</Text><Text style={styles.toggleSubtitle}>Read button labels aloud when tapped</Text></View><Pressable style={({ pressed, focused }) => [styles.toggle, focused && styles.tvFocusedSmall, spokenLabels && styles.toggleOn, pressed && styles.togglePressed]} onPress={() => setSpokenLabels(v => !v)}><View style={[styles.toggleThumb, spokenLabels && styles.toggleThumbOn]} /></Pressable></View></View>
+        <View style={styles.field}><View style={styles.toggleRow}><View style={styles.toggleInfo}><Text style={styles.label}>Spoken Labels</Text><Text style={styles.toggleSubtitle}>Read button labels aloud when tapped</Text></View><TVPressable style={({ pressed, focused }) => [styles.toggle, focused && styles.tvFocusedSmall, spokenLabels && styles.toggleOn, pressed && styles.togglePressed]} onPress={() => setSpokenLabels(v => !v)}><View style={[styles.toggleThumb, spokenLabels && styles.toggleThumbOn]} /></TVPressable></View></View>
 
-        {existing && <Pressable style={({ pressed, focused }) => [styles.deleteButton, focused && styles.tvFocused, pressed && styles.deleteButtonPressed]} onPress={handleDelete}><IconSymbol name="trash.fill" size={18} color="#D32F2F" /><Text style={styles.deleteButtonText}>Delete Profile</Text></Pressable>}
-        <Pressable style={({ pressed, focused }) => [styles.bottomSaveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed]} onPress={handleSave}>
+        {existing && <TVPressable style={({ pressed, focused }) => [styles.deleteButton, focused && styles.tvFocused, pressed && styles.deleteButtonPressed]} onPress={handleDelete}><IconSymbol name="trash.fill" size={18} color="#D32F2F" /><Text style={styles.deleteButtonText}>Delete Profile</Text></TVPressable>}
+        <TVPressable style={({ pressed, focused }) => [styles.bottomSaveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed]} onPress={handleSave}>
           <Text style={styles.bottomSaveBtnText}>Save Profile</Text>
-        </Pressable>
+        </TVPressable>
       </ScrollView>
     </ScreenContainer>
   );

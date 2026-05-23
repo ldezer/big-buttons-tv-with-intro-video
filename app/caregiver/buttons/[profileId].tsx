@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  Pressable,
   StyleSheet,
   Platform,
   Alert,
@@ -16,6 +15,7 @@ import { useProfiles } from '@/lib/profiles-context';
 import { BigButton } from '@/lib/types';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { cleanImageUri, getBundledButtonArt } from '@/lib/art';
+import { TVPressable } from '@/components/tv/tv-pressable';
 
 function getTextColor(bgColor: string): string {
   const hex = bgColor.replace('#', '');
@@ -93,7 +93,7 @@ export default function ButtonsEditor() {
     <ScreenContainer containerClassName="bg-white" edges={['top', 'left', 'right', 'bottom']}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable
+        <TVPressable
           style={({ pressed, focused }) => [styles.headerBtn, focused && styles.tvFocused, pressed && styles.headerBtnPressed]}
          
           onPress={() => router.back()}
@@ -101,12 +101,12 @@ export default function ButtonsEditor() {
           accessibilityLabel="Go back"
         >
           <IconSymbol name="arrow.left" size={22} color="#1565C0" />
-        </Pressable>
+        </TVPressable>
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>{profile.emoji} {profile.name}</Text>
           <Text style={styles.headerSubtitle}>{sortedButtons.length} buttons</Text>
         </View>
-        <Pressable
+        <TVPressable
           style={({ pressed, focused }) => [styles.addBtn, focused && styles.tvFocused, pressed && styles.addBtnPressed]}
           hasTVPreferredFocus
           onPress={handleAddButton}
@@ -114,11 +114,12 @@ export default function ButtonsEditor() {
           accessibilityLabel="Add new button"
         >
           <IconSymbol name="plus" size={20} color="#FFFFFF" />
-        </Pressable>
+          <Text style={styles.addBtnText}>Add Button</Text>
+        </TVPressable>
       </View>
 
       {/* Quick Packs Banner */}
-      <Pressable
+      <TVPressable
         style={({ pressed, focused }) => [styles.quickPacksBanner, focused && styles.tvFocused, pressed && styles.quickPacksBannerPressed]}
        
         onPress={handleQuickPacks}
@@ -127,7 +128,7 @@ export default function ButtonsEditor() {
       >
         <Text style={styles.quickPacksBannerText}>⚡ Add buttons from Quick Packs</Text>
         <IconSymbol name="chevron.right" size={16} color="#F9A825" />
-      </Pressable>
+      </TVPressable>
 
       {/* Button List */}
       {sortedButtons.length === 0 ? (
@@ -137,17 +138,17 @@ export default function ButtonsEditor() {
           <Text style={styles.emptyText}>
             Tap the + button above or use Quick Packs to add buttons.
           </Text>
-          <Pressable
+          <TVPressable
             style={({ pressed, focused }) => [styles.emptyAddBtn, focused && styles.tvFocused, pressed && styles.emptyAddBtnPressed]}
             onPress={handleAddButton}
           >
             <Text style={styles.emptyAddBtnText}>Add First Button</Text>
-          </Pressable>
+          </TVPressable>
         </View>
       ) : (
         <ScrollView contentContainerStyle={styles.list} showsVerticalScrollIndicator={false}>
           {sortedButtons.map(button => {
-            const artSource = cleanImageUri(button.imageUri) ? { uri: cleanImageUri(button.imageUri) } : getBundledButtonArt(button.bundledArtKey);
+            const artSource = button.bundledArtKey === 'emoji-only' ? null : (cleanImageUri(button.imageUri) ? { uri: cleanImageUri(button.imageUri) } : getBundledButtonArt(button.bundledArtKey));
             return (
               <View key={button.id} style={styles.buttonRow}>
                 {artSource ? (
@@ -168,7 +169,7 @@ export default function ButtonsEditor() {
 
                 {/* Actions */}
                 <View style={styles.buttonActions}>
-                  <Pressable
+                  <TVPressable
                     style={({ pressed, focused }) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
                     onPress={() => handleToggleFavorite(button)}
                     accessibilityRole="button"
@@ -179,23 +180,23 @@ export default function ButtonsEditor() {
                       size={20}
                       color={button.isFavorite ? '#F9A825' : '#BDBDBD'}
                     />
-                  </Pressable>
-                  <Pressable
+                  </TVPressable>
+                  <TVPressable
                     style={({ pressed, focused }) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
                     onPress={() => handleEditButton(button)}
                     accessibilityRole="button"
                     accessibilityLabel={`Edit ${button.label}`}
                   >
                     <IconSymbol name="pencil" size={20} color="#1565C0" />
-                  </Pressable>
-                  <Pressable
+                  </TVPressable>
+                  <TVPressable
                     style={({ pressed, focused }) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
                     onPress={() => handleDeleteButton(button)}
                     accessibilityRole="button"
                     accessibilityLabel={`Delete ${button.label}`}
                   >
                     <IconSymbol name="trash" size={20} color="#D32F2F" />
-                  </Pressable>
+                  </TVPressable>
                 </View>
               </View>
             );
@@ -226,11 +227,14 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E0E0E0',
   },
   headerBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: Platform.isTV ? 58 : 44,
+    height: Platform.isTV ? 58 : 44,
+    borderRadius: Platform.isTV ? 18 : 22,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: '#DADCE0',
+    backgroundColor: '#FFFFFF',
   },
   headerBtnPressed: {
     backgroundColor: '#F5F5F5',
@@ -250,15 +254,25 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   addBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#1565C0',
+    minWidth: Platform.isTV ? 190 : 44,
+    height: Platform.isTV ? 58 : 44,
+    borderRadius: Platform.isTV ? 18 : 22,
+    backgroundColor: '#111111',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 8,
+    paddingHorizontal: Platform.isTV ? 18 : 0,
+    borderWidth: 4,
+    borderColor: '#111111',
   },
   addBtnPressed: {
     opacity: 0.8,
+  },
+  addBtnText: {
+    color: '#FFFFFF',
+    fontSize: Platform.isTV ? 20 : 0,
+    fontWeight: '900',
   },
   quickPacksBanner: {
     flexDirection: 'row',
@@ -376,21 +390,23 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   tvFocused: {
-    borderWidth: 5,
+    borderWidth: 7,
     borderColor: '#000000',
     transform: [{ scale: 1.04 }],
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,
-    shadowRadius: 12,
-    elevation: 12,
+    shadowRadius: 18,
+    elevation: 32,
+    zIndex: 100,
   },
   tvFocusedSmall: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 4,
+    borderWidth: 6,
     borderColor: '#000000',
     transform: [{ scale: 1.12 }],
-    elevation: 12,
+    elevation: 30,
+    zIndex: 100,
   },
   selectionBar: {
     position: 'absolute',

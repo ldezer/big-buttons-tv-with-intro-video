@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   ScrollView,
-  Pressable,
   StyleSheet,
   Platform,
   Alert,
@@ -17,6 +16,7 @@ import { useProfiles } from '@/lib/profiles-context';
 import { BUTTON_COLORS, ButtonActionType, BigButton } from '@/lib/types';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { BUTTON_ART_OPTIONS, cleanImageUri, getBundledButtonArt } from '@/lib/art';
+import { TVPressable } from '@/components/tv/tv-pressable';
 
 const BUTTON_EMOJIS = [
   '🐕', '🐈', '🐦', '🐟', '🐎', '🐰', '🦁', '🐸',
@@ -112,13 +112,13 @@ export default function ButtonEditScreen() {
   return (
     <ScreenContainer containerClassName="bg-white" edges={['top', 'left', 'right', 'bottom']}>
       <View style={styles.header}>
-        <Pressable style={({ pressed, focused }) => [styles.headerBtn, focused && styles.tvFocused, pressed && styles.headerBtnPressed]} onPress={() => router.back()}>
+        <TVPressable style={({ pressed, focused }) => [styles.headerBtn, focused && styles.tvFocused, pressed && styles.headerBtnPressed]} onPress={() => router.back()}>
           <Text style={styles.headerBtnText}>Cancel</Text>
-        </Pressable>
+        </TVPressable>
         <Text style={styles.headerTitle}>{existing ? 'Edit Button' : 'New Button'}</Text>
-        <Pressable style={({ pressed, focused }) => [styles.saveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed]} onPress={handleSave}>
-          <Text style={styles.saveBtnText}>Save</Text>
-        </Pressable>
+        <TVPressable style={({ pressed, focused }) => [styles.saveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed]} onPress={handleSave}>
+          <Text style={styles.saveBtnText}>Save Button</Text>
+        </TVPressable>
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
@@ -146,9 +146,9 @@ export default function ButtonEditScreen() {
           <Text style={styles.label}>Button Emoji (replaces button art)</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.emojiRow}>
             {BUTTON_EMOJIS.map(e => (
-              <Pressable key={e} style={({ pressed, focused }) => [styles.emojiOption, focused && styles.tvFocusedSmall, emoji === e && styles.emojiOptionSelected, pressed && styles.emojiOptionPressed]} onPress={() => { setEmoji(e); setBundledArtKey('emoji-only'); setImageUri(''); }}>
+              <TVPressable key={e} style={({ pressed, focused }) => [styles.emojiOption, focused && styles.tvFocusedSmall, emoji === e && styles.emojiOptionSelected, pressed && styles.emojiOptionPressed]} onPress={() => { setEmoji(e); setBundledArtKey('emoji-only'); setImageUri(''); }}>
                 <Text style={styles.emojiOptionText}>{e}</Text>
-              </Pressable>
+              </TVPressable>
             ))}
           </ScrollView>
         </View>
@@ -157,9 +157,9 @@ export default function ButtonEditScreen() {
           <Text style={styles.label}>Button Color</Text>
           <View style={styles.colorRow}>
             {BUTTON_COLORS.map(c => (
-              <Pressable key={c} style={({ pressed, focused }) => [styles.colorOption, focused && styles.tvFocusedSmall, { backgroundColor: c }, color === c && styles.colorOptionSelected, pressed && styles.colorOptionPressed]} onPress={() => setColor(c)}>
+              <TVPressable key={c} style={({ pressed, focused }) => [styles.colorOption, focused && styles.tvFocusedSmall, { backgroundColor: c }, color === c && styles.colorOptionSelected, pressed && styles.colorOptionPressed]} onPress={() => setColor(c)}>
                 {color === c && <IconSymbol name="checkmark" size={18} color="#FFFFFF" />}
-              </Pressable>
+              </TVPressable>
             ))}
           </View>
         </View>
@@ -174,9 +174,9 @@ export default function ButtonEditScreen() {
           <Text style={styles.label}>Bundled Art Slot</Text>
           <View style={styles.optionList}>
             {BUTTON_ART_OPTIONS.map(option => (
-              <Pressable key={option.key || 'none'} style={({ pressed, focused }) => [styles.actionTypeOption, focused && styles.tvFocused, bundledArtKey === option.key && styles.actionTypeOptionSelected, pressed && styles.actionTypeOptionPressed]} onPress={() => setBundledArtKey(option.key)}>
+              <TVPressable key={option.key || 'none'} style={({ pressed, focused }) => [styles.actionTypeOption, focused && styles.tvFocused, bundledArtKey === option.key && styles.actionTypeOptionSelected, pressed && styles.actionTypeOptionPressed]} onPress={() => setBundledArtKey(option.key)}>
                 <Text style={styles.actionTypeLabel}>{option.label}</Text>
-              </Pressable>
+              </TVPressable>
             ))}
           </View>
           <Text style={styles.help}>Replace files in assets/images/custom to make these slots your own art.</Text>
@@ -186,13 +186,13 @@ export default function ButtonEditScreen() {
           <Text style={styles.label}>What happens when tapped?</Text>
           <View style={styles.actionTypeList}>
             {ACTION_TYPES.map(at => (
-              <Pressable key={at.type} style={({ pressed, focused }) => [styles.actionTypeOption, focused && styles.tvFocused, actionType === at.type && styles.actionTypeOptionSelected, pressed && styles.actionTypeOptionPressed]} onPress={() => setActionType(at.type)}>
+              <TVPressable key={at.type} style={({ pressed, focused }) => [styles.actionTypeOption, focused && styles.tvFocused, actionType === at.type && styles.actionTypeOptionSelected, pressed && styles.actionTypeOptionPressed]} onPress={() => setActionType(at.type)}>
                 <Text style={styles.actionTypeEmoji}>{at.emoji}</Text>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.actionTypeLabel}>{at.label}</Text>
                   <Text style={styles.actionTypeDescription}>{at.description}</Text>
                 </View>
-              </Pressable>
+              </TVPressable>
             ))}
           </View>
         </View>
@@ -210,25 +210,25 @@ export default function ButtonEditScreen() {
         )}
 
 
-        <Pressable style={({ pressed, focused }) => [styles.bottomSaveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed]} onPress={handleSave}>
+        <TVPressable style={({ pressed, focused }) => [styles.bottomSaveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed]} onPress={handleSave}>
           <Text style={styles.bottomSaveBtnText}>Save Button</Text>
-        </Pressable>
+        </TVPressable>
       </ScrollView>
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#E0E0E0' },
-  headerBtn: { paddingVertical: 8, paddingHorizontal: 12, borderRadius: 8 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Platform.isTV ? 36 : 16, paddingVertical: Platform.isTV ? 20 : 12, borderBottomWidth: 1, borderBottomColor: '#E0E0E0', backgroundColor: '#FFFFFF' },
+  headerBtn: { paddingVertical: Platform.isTV ? 16 : 10, paddingHorizontal: Platform.isTV ? 22 : 14, borderRadius: 14, borderWidth: 3, borderColor: '#DADCE0', backgroundColor: '#FFFFFF' },
   headerBtnPressed: { backgroundColor: '#F5F5F5' },
   headerBtnText: { fontSize: 16, color: '#757575' },
-  headerTitle: { fontSize: 18, fontWeight: '700', color: '#1A1A1A' },
-  saveBtn: { backgroundColor: '#1565C0', paddingVertical: 8, paddingHorizontal: 20, borderRadius: 50 },
+  headerTitle: { fontSize: Platform.isTV ? 26 : 18, fontWeight: '900', color: '#1A1A1A' },
+  saveBtn: { backgroundColor: '#111111', paddingVertical: Platform.isTV ? 16 : 10, paddingHorizontal: Platform.isTV ? 28 : 20, borderRadius: 18, borderWidth: 4, borderColor: '#111111' },
   saveBtnPressed: { opacity: 0.8 },
-  saveBtnText: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
-  tvFocused: { borderWidth: 5, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.75, shadowRadius: 16, elevation: 16, transform: [{ scale: 1.03 }] },
-  tvFocusedSmall: { borderWidth: 4, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.75, shadowRadius: 12, elevation: 14, transform: [{ scale: 1.08 }] },
+  saveBtnText: { fontSize: Platform.isTV ? 22 : 16, fontWeight: '900', color: '#FFFFFF' },
+  tvFocused: { borderWidth: 7, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.95, shadowRadius: 18, elevation: 32, transform: [{ scale: 1.04 }], zIndex: 100 },
+  tvFocusedSmall: { borderWidth: 6, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.95, shadowRadius: 16, elevation: 30, transform: [{ scale: 1.08 }], zIndex: 100 },
   bottomSaveBtn: { marginTop: 16, marginBottom: 32, backgroundColor: '#111111', paddingVertical: Platform.isTV ? 24 : 18, borderRadius: 22, alignItems: 'center', borderWidth: 4, borderColor: '#111111' },
   bottomSaveBtnText: { color: '#FFFFFF', fontSize: 22, fontWeight: '900' },
   content: { padding: 20, gap: 24, paddingBottom: 48 },

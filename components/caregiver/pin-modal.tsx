@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  Pressable,
   StyleSheet,
   Platform,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { ScreenContainer } from '@/components/screen-container';
+import { TVPressable } from '@/components/tv/tv-pressable';
 
 interface PinModalProps {
   onSubmit: (pin: string) => void;
@@ -56,9 +56,9 @@ export function PinModal({ onSubmit, onCancel }: PinModalProps) {
           {digits.map((d, i) => {
             if (d === '') return <View key={i} style={styles.keyEmpty} />;
             return (
-              <Pressable
+              <TVPressable
                 key={i}
-                style={({ pressed }) => [
+                style={({ pressed }: any) => [
                   styles.key,
                   d === '⌫' && styles.keyDelete,
                   pressed && styles.keyPressed,
@@ -68,20 +68,20 @@ export function PinModal({ onSubmit, onCancel }: PinModalProps) {
                 accessibilityLabel={d === '⌫' ? 'Delete' : d}
               >
                 <Text style={[styles.keyText, d === '⌫' && styles.keyDeleteText]}>{d}</Text>
-              </Pressable>
+              </TVPressable>
             );
           })}
         </View>
 
         {/* Cancel */}
-        <Pressable
-          style={({ pressed }) => [styles.cancelButton, pressed && styles.cancelButtonPressed]}
+        <TVPressable
+          style={({ pressed }: any) => [styles.cancelButton, pressed && styles.cancelButtonPressed]}
           onPress={onCancel}
           accessibilityRole="button"
           accessibilityLabel="Cancel"
         >
           <Text style={styles.cancelText}>Cancel</Text>
-        </Pressable>
+        </TVPressable>
       </View>
     </ScreenContainer>
   );

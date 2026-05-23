@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  Pressable,
   StyleSheet,
   Platform,
   Alert,
@@ -15,6 +14,7 @@ import { useProfiles } from '@/lib/profiles-context';
 import { QUICK_PACKS } from '@/lib/quick-packs';
 import { QuickPack } from '@/lib/types';
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { TVPressable } from '@/components/tv/tv-pressable';
 
 function getTextColor(bgColor: string): string {
   const hex = bgColor.replace('#', '');
@@ -82,12 +82,12 @@ export default function QuickPacksScreen() {
     <ScreenContainer containerClassName="bg-white" edges={['top', 'left', 'right', 'bottom']}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable
-          style={({ pressed }) => [styles.headerBtn, pressed && styles.headerBtnPressed]}
+        <TVPressable
+          style={({ pressed }: any) => [styles.headerBtn, pressed && styles.headerBtnPressed]}
           onPress={() => router.back()}
         >
           <IconSymbol name="arrow.left" size={22} color="#1565C0" />
-        </Pressable>
+        </TVPressable>
         <Text style={styles.headerTitle}>Quick Packs</Text>
         <View style={styles.headerSpacer} />
       </View>
@@ -102,8 +102,8 @@ export default function QuickPacksScreen() {
           return (
             <View key={pack.id} style={styles.packCard}>
               {/* Pack Header */}
-              <Pressable
-                style={({ pressed }) => [styles.packHeader, pressed && styles.packHeaderPressed]}
+              <TVPressable
+                style={({ pressed }: any) => [styles.packHeader, pressed && styles.packHeaderPressed]}
                 onPress={() => handleTogglePack(pack.id)}
               >
                 <Text style={styles.packEmoji}>{pack.emoji}</Text>
@@ -119,7 +119,7 @@ export default function QuickPacksScreen() {
                     color="#757575"
                   />
                 </View>
-              </Pressable>
+              </TVPressable>
 
               {/* Expanded Preview */}
               {isExpanded && (
@@ -147,15 +147,15 @@ export default function QuickPacksScreen() {
                   </ScrollView>
 
                   {/* Apply Button */}
-                  <Pressable
-                    style={({ pressed }) => [styles.applyButton, pressed && styles.applyButtonPressed]}
+                  <TVPressable
+                    style={({ pressed }: any) => [styles.applyButton, pressed && styles.applyButtonPressed]}
                     onPress={() => handleApply(pack)}
                   >
                     <IconSymbol name="plus.circle.fill" size={20} color="#FFFFFF" />
                     <Text style={styles.applyButtonText}>
                       Apply "{pack.name}" Pack
                     </Text>
-                  </Pressable>
+                  </TVPressable>
                 </View>
               )}
             </View>

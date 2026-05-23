@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  Pressable,
   StyleSheet,
   Platform,
   Alert,
@@ -16,6 +15,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { useApp } from '@/lib/app-context';
 import { FontSize, ColumnCount } from '@/lib/types';
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { TVPressable, tvFocusStyles } from '@/components/tv/tv-pressable';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -64,12 +64,12 @@ export default function SettingsScreen() {
     <ScreenContainer containerClassName="bg-white" edges={['top', 'left', 'right', 'bottom']}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable
-          style={({ pressed, focused }) => [styles.headerBtn, focused && styles.tvFocusedSmall, pressed && styles.headerBtnPressed]}
+        <TVPressable
+          style={({ pressed, focused }: any) => [styles.headerBtn, focused && styles.tvFocusedSmall, pressed && styles.headerBtnPressed]}
           onPress={() => router.back()}
         >
           <IconSymbol name="arrow.left" size={22} color="#1565C0" />
-        </Pressable>
+        </TVPressable>
         <Text style={styles.headerTitle}>Settings</Text>
         <View style={styles.headerSpacer} />
       </View>
@@ -82,9 +82,9 @@ export default function SettingsScreen() {
           <Text style={styles.sectionSubtitle}>Applied to new profiles</Text>
           <View style={styles.segmentRow}>
             {(['large', 'xlarge', 'xxlarge'] as FontSize[]).map(fs => (
-              <Pressable
+              <TVPressable
                 key={fs}
-                style={({ pressed }) => [
+                style={({ pressed }: any) => [
                   styles.segment,
                   settings.defaultFontSize === fs && styles.segmentActive,
                   pressed && styles.segmentPressed,
@@ -94,7 +94,7 @@ export default function SettingsScreen() {
                 <Text style={[styles.segmentText, settings.defaultFontSize === fs && styles.segmentTextActive]}>
                   {fs === 'large' ? 'Large' : fs === 'xlarge' ? 'X-Large' : 'XX-Large'}
                 </Text>
-              </Pressable>
+              </TVPressable>
             ))}
           </View>
         </View>
@@ -105,9 +105,9 @@ export default function SettingsScreen() {
           <Text style={styles.sectionSubtitle}>Applied to new profiles</Text>
           <View style={styles.segmentRow}>
             {([1, 2, 3] as ColumnCount[]).map(c => (
-              <Pressable
+              <TVPressable
                 key={c}
-                style={({ pressed }) => [
+                style={({ pressed }: any) => [
                   styles.segment,
                   settings.defaultColumns === c && styles.segmentActive,
                   pressed && styles.segmentPressed,
@@ -117,7 +117,7 @@ export default function SettingsScreen() {
                 <Text style={[styles.segmentText, settings.defaultColumns === c && styles.segmentTextActive]}>
                   {c} {c === 1 ? 'Column' : 'Columns'}
                 </Text>
-              </Pressable>
+              </TVPressable>
             ))}
           </View>
         </View>
@@ -129,8 +129,8 @@ export default function SettingsScreen() {
               <Text style={styles.sectionTitle}>Default Spoken Labels</Text>
               <Text style={styles.sectionSubtitle}>Read button labels aloud by default</Text>
             </View>
-            <Pressable
-              style={({ pressed }) => [
+            <TVPressable
+              style={({ pressed }: any) => [
                 styles.toggle,
                 settings.defaultSpokenLabels && styles.toggleOn,
                 pressed && styles.togglePressed,
@@ -138,7 +138,7 @@ export default function SettingsScreen() {
               onPress={() => updateSettings({ defaultSpokenLabels: !settings.defaultSpokenLabels })}
             >
               <View style={[styles.toggleThumb, settings.defaultSpokenLabels && styles.toggleThumbOn]} />
-            </Pressable>
+            </TVPressable>
           </View>
         </View>
 
@@ -153,23 +153,23 @@ export default function SettingsScreen() {
 
           {!showPinSetup ? (
             <View style={styles.pinActions}>
-              <Pressable
-                style={({ pressed, focused }) => [styles.pinButton, focused && styles.tvFocused, pressed && styles.pinButtonPressed]}
+              <TVPressable
+                style={({ pressed, focused }: any) => [styles.pinButton, focused && styles.tvFocused, pressed && styles.pinButtonPressed]}
                 onPress={() => setShowPinSetup(true)}
               >
                 <IconSymbol name="lock.fill" size={18} color="#FFFFFF" />
                 <Text style={styles.pinButtonText}>
                   {settings.caregiverPin ? 'Change PIN' : 'Set PIN'}
                 </Text>
-              </Pressable>
+              </TVPressable>
               {settings.caregiverPin && (
-                <Pressable
-                  style={({ pressed, focused }) => [styles.removePinButton, focused && styles.tvFocused, pressed && styles.removePinButtonPressed]}
+                <TVPressable
+                  style={({ pressed, focused }: any) => [styles.removePinButton, focused && styles.tvFocused, pressed && styles.removePinButtonPressed]}
                   onPress={handleRemovePin}
                 >
                   <IconSymbol name="lock.open.fill" size={18} color="#D32F2F" />
                   <Text style={styles.removePinButtonText}>Remove PIN</Text>
-                </Pressable>
+                </TVPressable>
               )}
             </View>
           ) : (
@@ -198,18 +198,18 @@ export default function SettingsScreen() {
                 onSubmitEditing={handleSetPin}
               />
               <View style={styles.pinSetupActions}>
-                <Pressable
-                  style={({ pressed, focused }) => [styles.pinButton, focused && styles.tvFocused, pressed && styles.pinButtonPressed]}
+                <TVPressable
+                  style={({ pressed, focused }: any) => [styles.pinButton, focused && styles.tvFocused, pressed && styles.pinButtonPressed]}
                   onPress={handleSetPin}
                 >
                   <Text style={styles.pinButtonText}>Save PIN</Text>
-                </Pressable>
-                <Pressable
-                  style={({ pressed, focused }) => [styles.cancelBtn, focused && styles.tvFocused, pressed && styles.cancelBtnPressed]}
+                </TVPressable>
+                <TVPressable
+                  style={({ pressed, focused }: any) => [styles.cancelBtn, focused && styles.tvFocused, pressed && styles.cancelBtnPressed]}
                   onPress={() => { setShowPinSetup(false); setNewPin(''); setConfirmPin(''); }}
                 >
                   <Text style={styles.cancelBtnText}>Cancel</Text>
-                </Pressable>
+                </TVPressable>
               </View>
             </View>
           )}
@@ -416,8 +416,8 @@ const styles = StyleSheet.create({
     color: '#757575',
     fontWeight: '500',
   },
-  tvFocused: { borderWidth: 5, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.75, shadowRadius: 16, elevation: 16, transform: [{ scale: 1.03 }] },
-  tvFocusedSmall: { borderWidth: 4, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.75, shadowRadius: 12, elevation: 14, transform: [{ scale: 1.08 }] },
+  tvFocused: { ...tvFocusStyles.focused },
+  tvFocusedSmall: { ...tvFocusStyles.focusedSmall },
   aboutCard: {
     backgroundColor: '#F5F5F5',
     borderRadius: 16,

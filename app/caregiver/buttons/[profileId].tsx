@@ -15,7 +15,7 @@ import { useProfiles } from '@/lib/profiles-context';
 import { BigButton } from '@/lib/types';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { cleanImageUri, getBundledButtonArt } from '@/lib/art';
-import { TVPressable } from '@/components/tv/tv-pressable';
+import { TVPressable, tvFocusStyles } from '@/components/tv/tv-pressable';
 
 function getTextColor(bgColor: string): string {
   const hex = bgColor.replace('#', '');
@@ -94,7 +94,7 @@ export default function ButtonsEditor() {
       {/* Header */}
       <View style={styles.header}>
         <TVPressable
-          style={({ pressed, focused }) => [styles.headerBtn, focused && styles.tvFocused, pressed && styles.headerBtnPressed]}
+          style={({ pressed, focused }: any) => [styles.headerBtn, focused && styles.tvFocused, pressed && styles.headerBtnPressed]}
          
           onPress={() => router.back()}
           accessibilityRole="button"
@@ -107,7 +107,7 @@ export default function ButtonsEditor() {
           <Text style={styles.headerSubtitle}>{sortedButtons.length} buttons</Text>
         </View>
         <TVPressable
-          style={({ pressed, focused }) => [styles.addBtn, focused && styles.tvFocused, pressed && styles.addBtnPressed]}
+          style={({ pressed, focused }: any) => [styles.addBtn, focused && styles.tvFocused, pressed && styles.addBtnPressed]}
           hasTVPreferredFocus
           onPress={handleAddButton}
           accessibilityRole="button"
@@ -120,7 +120,7 @@ export default function ButtonsEditor() {
 
       {/* Quick Packs Banner */}
       <TVPressable
-        style={({ pressed, focused }) => [styles.quickPacksBanner, focused && styles.tvFocused, pressed && styles.quickPacksBannerPressed]}
+        style={({ pressed, focused }: any) => [styles.quickPacksBanner, focused && styles.tvFocused, pressed && styles.quickPacksBannerPressed]}
        
         onPress={handleQuickPacks}
         accessibilityRole="button"
@@ -139,7 +139,7 @@ export default function ButtonsEditor() {
             Tap the + button above or use Quick Packs to add buttons.
           </Text>
           <TVPressable
-            style={({ pressed, focused }) => [styles.emptyAddBtn, focused && styles.tvFocused, pressed && styles.emptyAddBtnPressed]}
+            style={({ pressed, focused }: any) => [styles.emptyAddBtn, focused && styles.tvFocused, pressed && styles.emptyAddBtnPressed]}
             onPress={handleAddButton}
           >
             <Text style={styles.emptyAddBtnText}>Add First Button</Text>
@@ -170,7 +170,7 @@ export default function ButtonsEditor() {
                 {/* Actions */}
                 <View style={styles.buttonActions}>
                   <TVPressable
-                    style={({ pressed, focused }) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
+                    style={({ pressed, focused }: any) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
                     onPress={() => handleToggleFavorite(button)}
                     accessibilityRole="button"
                     accessibilityLabel={button.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
@@ -182,7 +182,7 @@ export default function ButtonsEditor() {
                     />
                   </TVPressable>
                   <TVPressable
-                    style={({ pressed, focused }) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
+                    style={({ pressed, focused }: any) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
                     onPress={() => handleEditButton(button)}
                     accessibilityRole="button"
                     accessibilityLabel={`Edit ${button.label}`}
@@ -190,7 +190,7 @@ export default function ButtonsEditor() {
                     <IconSymbol name="pencil" size={20} color="#1565C0" />
                   </TVPressable>
                   <TVPressable
-                    style={({ pressed, focused }) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
+                    style={({ pressed, focused }: any) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
                     onPress={() => handleDeleteButton(button)}
                     accessibilityRole="button"
                     accessibilityLabel={`Delete ${button.label}`}
@@ -389,25 +389,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#FFFFFF',
   },
-  tvFocused: {
-    borderWidth: 7,
-    borderColor: '#000000',
-    transform: [{ scale: 1.04 }],
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.9,
-    shadowRadius: 18,
-    elevation: 32,
-    zIndex: 100,
-  },
-  tvFocusedSmall: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 6,
-    borderColor: '#000000',
-    transform: [{ scale: 1.12 }],
-    elevation: 30,
-    zIndex: 100,
-  },
+  tvFocused: { ...tvFocusStyles.focused },
+  tvFocusedSmall: { ...tvFocusStyles.focusedSmall },
   selectionBar: {
     position: 'absolute',
     left: 20,

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  Pressable,
   StyleSheet,
   Platform,
   Alert,
@@ -16,6 +15,7 @@ import { useApp } from '@/lib/app-context';
 import { Profile } from '@/lib/types';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { PinModal } from '@/components/caregiver/pin-modal';
+import { TVPressable, tvFocusStyles } from '@/components/tv/tv-pressable';
 
 export default function CaregiverDashboard() {
   const router = useRouter();
@@ -74,25 +74,25 @@ export default function CaregiverDashboard() {
     <ScreenContainer containerClassName="bg-white" edges={['top', 'left', 'right', 'bottom']}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable
-          style={({ pressed, focused }) => [styles.backButton, focused && styles.tvFocused, pressed && styles.backButtonPressed]}
+        <TVPressable
+          style={({ pressed, focused }: any) => [styles.backButton, focused && styles.tvFocused, pressed && styles.backButtonPressed]}
          
           onPress={handleBack}
           accessibilityRole="button"
           accessibilityLabel="Go back"
         >
           <IconSymbol name="arrow.left" size={22} color="#1565C0" />
-        </Pressable>
+        </TVPressable>
         <Text style={styles.headerTitle}>Caregiver Setup</Text>
-        <Pressable
-          style={({ pressed, focused }) => [styles.settingsButton, focused && styles.tvFocused, pressed && styles.settingsButtonPressed]}
+        <TVPressable
+          style={({ pressed, focused }: any) => [styles.settingsButton, focused && styles.tvFocused, pressed && styles.settingsButtonPressed]}
          
           onPress={handleSettings}
           accessibilityRole="button"
           accessibilityLabel="Open settings"
         >
           <IconSymbol name="gearshape.fill" size={24} color="#757575" />
-        </Pressable>
+        </TVPressable>
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
@@ -100,8 +100,8 @@ export default function CaregiverDashboard() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Profiles</Text>
-            <Pressable
-              style={({ pressed, focused }) => [styles.addButton, focused && styles.tvFocused, pressed && styles.addButtonPressed]}
+            <TVPressable
+              style={({ pressed, focused }: any) => [styles.addButton, focused && styles.tvFocused, pressed && styles.addButtonPressed]}
               hasTVPreferredFocus
               onPress={handleAddProfile}
               accessibilityRole="button"
@@ -109,7 +109,7 @@ export default function CaregiverDashboard() {
             >
               <IconSymbol name="plus" size={18} color="#FFFFFF" />
               <Text style={styles.addButtonText}>Add Profile</Text>
-            </Pressable>
+            </TVPressable>
           </View>
 
           {profiles.length === 0 ? (
@@ -133,24 +133,24 @@ export default function CaregiverDashboard() {
                     </View>
                   </View>
                   <View style={styles.profileCardActions}>
-                    <Pressable
-                      style={({ pressed, focused }) => [styles.cardAction, focused && styles.tvFocused, pressed && styles.cardActionPressed]}
+                    <TVPressable
+                      style={({ pressed, focused }: any) => [styles.cardAction, focused && styles.tvFocused, pressed && styles.cardActionPressed]}
                       onPress={() => handleEditButtons(profile)}
                       accessibilityRole="button"
                       accessibilityLabel={`Edit buttons for ${profile.name}`}
                     >
                       <IconSymbol name="square.grid.2x2.fill" size={20} color="#1565C0" />
                       <Text style={styles.cardActionText}>Buttons</Text>
-                    </Pressable>
-                    <Pressable
-                      style={({ pressed, focused }) => [styles.cardAction, focused && styles.tvFocused, pressed && styles.cardActionPressed]}
+                    </TVPressable>
+                    <TVPressable
+                      style={({ pressed, focused }: any) => [styles.cardAction, focused && styles.tvFocused, pressed && styles.cardActionPressed]}
                       onPress={() => handleEditProfile(profile)}
                       accessibilityRole="button"
                       accessibilityLabel={`Edit profile for ${profile.name}`}
                     >
                       <IconSymbol name="pencil" size={20} color="#757575" />
                       <Text style={[styles.cardActionText, { color: '#757575' }]}>Edit</Text>
-                    </Pressable>
+                    </TVPressable>
                   </View>
                 </View>
               ))}
@@ -161,8 +161,8 @@ export default function CaregiverDashboard() {
         {/* Quick Packs Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Quick Packs</Text>
-          <Pressable
-            style={({ pressed, focused }) => [styles.quickPacksCard, focused && styles.tvFocused, pressed && styles.quickPacksCardPressed]}
+          <TVPressable
+            style={({ pressed, focused }: any) => [styles.quickPacksCard, focused && styles.tvFocused, pressed && styles.quickPacksCardPressed]}
            
             onPress={handleQuickPacks}
             accessibilityRole="button"
@@ -176,7 +176,7 @@ export default function CaregiverDashboard() {
               </Text>
             </View>
             <IconSymbol name="chevron.right" size={20} color="#757575" />
-          </Pressable>
+          </TVPressable>
         </View>
       </ScrollView>
     </ScreenContainer>
@@ -361,16 +361,7 @@ const styles = StyleSheet.create({
     color: '#757575',
     marginTop: 2,
   },
-  tvFocused: {
-    borderWidth: 5,
-    borderColor: '#000000',
-    transform: [{ scale: 1.04 }],
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.9,
-    shadowRadius: 12,
-    elevation: 12,
-  },
+  tvFocused: { ...tvFocusStyles.focused },
   selectionBar: {
     position: 'absolute',
     left: 20,

@@ -1,20 +1,44 @@
 import React, { useState } from 'react';
 import { Pressable, PressableProps, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 
+export type TVPressableState = { pressed: boolean; hovered?: boolean; focused: boolean };
 export type TVPressableProps = PressableProps & {
   children: React.ReactNode;
-  style?: StyleProp<ViewStyle> | ((state: { pressed: boolean; hovered?: boolean; focused: boolean }) => StyleProp<ViewStyle>);
+  style?: StyleProp<ViewStyle> | ((state: TVPressableState) => StyleProp<ViewStyle>);
   focusStyle?: StyleProp<ViewStyle>;
   pressedStyle?: StyleProp<ViewStyle>;
+  disabledStyle?: StyleProp<ViewStyle>;
 };
 
-export function TVPressable({ children, style, focusStyle, pressedStyle, onFocus, onBlur, ...props }: TVPressableProps) {
+/**
+ * One focus/hover wrapper for Android TV + mouse/web.
+ * The focused/hovered state is applied by onFocus/onBlur and onHoverIn/onHoverOut,
+ * not by guessing or debug labels. Any screen using this component gets the same
+ * thick black TV-style moving selection box.
+ */
+export function TVPressable({
+  children,
+  style,
+  focusStyle,
+  pressedStyle,
+  disabledStyle,
+  disabled,
+  onFocus,
+  onBlur,
+  onHoverIn,
+  onHoverOut,
+  ...props
+}: TVPressableProps) {
   const [focused, setFocused] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const active = !disabled && (focused || hovered);
 
   return (
     <Pressable
       {...props}
-      focusable
+      disabled={disabled}
+      focusable={!disabled}
+      accessible
       onFocus={(event) => {
         setFocused(true);
         onFocus?.(event);
@@ -23,10 +47,19 @@ export function TVPressable({ children, style, focusStyle, pressedStyle, onFocus
         setFocused(false);
         onBlur?.(event);
       }}
+      onHoverIn={(event) => {
+        setHovered(true);
+        onHoverIn?.(event);
+      }}
+      onHoverOut={(event) => {
+        setHovered(false);
+        onHoverOut?.(event);
+      }}
       style={(state) => [
-        typeof style === 'function' ? style({ ...state, focused }) : style,
-        focused && (focusStyle ?? tvFocusStyles.focused),
+        typeof style === 'function' ? style({ ...state, focused: active, hovered }) : style,
+        active && (focusStyle ?? tvFocusStyles.focused),
         state.pressed && (pressedStyle ?? tvFocusStyles.pressed),
+        disabled && (disabledStyle ?? tvFocusStyles.disabled),
       ]}
     >
       {children}
@@ -36,28 +69,33 @@ export function TVPressable({ children, style, focusStyle, pressedStyle, onFocus
 
 export const tvFocusStyles = StyleSheet.create({
   focused: {
-    borderWidth: 7,
+    borderWidth: 8,
     borderColor: '#000000',
-    transform: [{ scale: 1.05 }],
+    backgroundColor: '#FFFFFF',
+    transform: [{ scale: 1.07 }],
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.95,
-    shadowRadius: 18,
-    elevation: 32,
-    zIndex: 100,
+    shadowOpacity: 1,
+    shadowRadius: 24,
+    elevation: 40,
+    zIndex: 999,
   },
   focusedSmall: {
-    borderWidth: 5,
+    borderWidth: 6,
     borderColor: '#000000',
-    transform: [{ scale: 1.06 }],
+    transform: [{ scale: 1.1 }],
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.9,
-    shadowRadius: 14,
-    elevation: 28,
-    zIndex: 100,
+    shadowOpacity: 1,
+    shadowRadius: 18,
+    elevation: 36,
+    zIndex: 999,
   },
   pressed: {
-    opacity: 0.85,
+    opacity: 0.82,
+    transform: [{ scale: 0.98 }],
+  },
+  disabled: {
+    opacity: 0.38,
   },
 });

@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
-  Pressable,
-  PressableProps,
   StyleSheet,
   Platform,
   Image,
@@ -13,22 +11,7 @@ import * as Haptics from 'expo-haptics';
 import * as WebBrowser from 'expo-web-browser';
 import { ScreenContainer } from '@/components/screen-container';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-
-type TVPressableProps = PressableProps & { children: React.ReactNode; style?: any };
-function TVPressable({ children, style, onFocus, onBlur, ...props }: TVPressableProps) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <Pressable
-      {...props}
-      focusable
-      onFocus={(event) => { setFocused(true); onFocus?.(event); }}
-      onBlur={(event) => { setFocused(false); onBlur?.(event); }}
-      style={(state) => [typeof style === 'function' ? style({ ...state, focused }) : style, focused && styles.tvFocused, state.pressed && styles.pressed]}
-    >
-      {children}
-    </Pressable>
-  );
-}
+import { TVPressable, tvFocusStyles } from '@/components/tv/tv-pressable';
 
 export default function ChoiceScreen() {
   const { query, label } = useLocalSearchParams<{ query: string; label: string }>();
@@ -88,6 +71,6 @@ const styles = StyleSheet.create({
   profilePanel: { alignItems: 'center' },
   profileAction: { minWidth: Platform.isTV ? 230 : 140, borderRadius: 24, paddingVertical: Platform.isTV ? 20 : 14, paddingHorizontal: Platform.isTV ? 24 : 18, backgroundColor: '#FFFFFF', borderWidth: 4, borderColor: '#DADCE0', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 10 },
   profileActionText: { color: '#111111', fontSize: Platform.isTV ? 22 : 17, fontWeight: '900' },
-  tvFocused: { borderWidth: 8, borderColor: '#000000', transform: [{ scale: 1.06 }], shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.95, shadowRadius: 22, elevation: 30, zIndex: 50 },
+  tvFocused: { ...tvFocusStyles.focused },
   pressed: { opacity: 0.86 },
 });

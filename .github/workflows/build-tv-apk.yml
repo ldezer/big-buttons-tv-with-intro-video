@@ -13,6 +13,7 @@ jobs:
     env:
       CI: true
       EXPO_NO_TELEMETRY: 1
+      NODE_ENV: production
 
     steps:
       - name: Checkout project
@@ -42,7 +43,7 @@ jobs:
 
       - name: Fix Gradle memory and signing
         run: |
-          printf '\norg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8\n' >> android/gradle.properties
+          printf '\norg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8\nnewArchEnabled=true\n' >> android/gradle.properties
           if [ -f android/app/build.gradle ]; then
             sed -i 's/signingConfig signingConfigs.release/signingConfig signingConfigs.debug/g' android/app/build.gradle || true
           fi

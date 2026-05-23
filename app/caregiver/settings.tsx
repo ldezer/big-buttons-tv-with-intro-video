@@ -416,8 +416,8 @@ const styles = StyleSheet.create({
     color: '#757575',
     fontWeight: '500',
   },
-  tvFocused: { borderWidth: 5, borderColor: '#E53935', shadowColor: '#FFFFFF', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 16, elevation: 16, transform: [{ scale: 1.03 }] },
-  tvFocusedSmall: { borderWidth: 4, borderColor: '#E53935', shadowColor: '#FFFFFF', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 12, elevation: 14, transform: [{ scale: 1.08 }] },
+  tvFocused: { borderWidth: 5, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.75, shadowRadius: 16, elevation: 16, transform: [{ scale: 1.03 }] },
+  tvFocusedSmall: { borderWidth: 4, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.75, shadowRadius: 12, elevation: 14, transform: [{ scale: 1.08 }] },
   aboutCard: {
     backgroundColor: '#F5F5F5',
     borderRadius: 16,

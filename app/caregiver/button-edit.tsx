@@ -65,6 +65,7 @@ export default function ButtonEditScreen() {
   const previewSource = useMemo(() => {
     const remote = cleanImageUri(imageUri);
     if (remote) return { uri: remote } as const;
+    if (bundledArtKey === 'emoji-only') return null;
     return getBundledButtonArt(bundledArtKey);
   }, [imageUri, bundledArtKey]);
 
@@ -145,7 +146,7 @@ export default function ButtonEditScreen() {
           <Text style={styles.label}>Button Emoji (replaces button art)</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.emojiRow}>
             {BUTTON_EMOJIS.map(e => (
-              <Pressable key={e} style={({ pressed, focused }) => [styles.emojiOption, focused && styles.tvFocusedSmall, emoji === e && styles.emojiOptionSelected, pressed && styles.emojiOptionPressed]} onPress={() => { setEmoji(e); setBundledArtKey(''); setImageUri(''); }}>
+              <Pressable key={e} style={({ pressed, focused }) => [styles.emojiOption, focused && styles.tvFocusedSmall, emoji === e && styles.emojiOptionSelected, pressed && styles.emojiOptionPressed]} onPress={() => { setEmoji(e); setBundledArtKey('emoji-only'); setImageUri(''); }}>
                 <Text style={styles.emojiOptionText}>{e}</Text>
               </Pressable>
             ))}
@@ -226,16 +227,16 @@ const styles = StyleSheet.create({
   saveBtn: { backgroundColor: '#1565C0', paddingVertical: 8, paddingHorizontal: 20, borderRadius: 50 },
   saveBtnPressed: { opacity: 0.8 },
   saveBtnText: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
-  tvFocused: { borderWidth: 5, borderColor: '#E53935', shadowColor: '#FFFFFF', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 16, elevation: 16, transform: [{ scale: 1.03 }] },
-  tvFocusedSmall: { borderWidth: 4, borderColor: '#E53935', shadowColor: '#FFFFFF', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 1, shadowRadius: 12, elevation: 14, transform: [{ scale: 1.08 }] },
-  bottomSaveBtn: { marginTop: 8, marginBottom: 24, backgroundColor: '#D32F2F', paddingVertical: 18, borderRadius: 18, alignItems: 'center', borderWidth: 3, borderColor: '#FFFFFF' },
+  tvFocused: { borderWidth: 5, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.75, shadowRadius: 16, elevation: 16, transform: [{ scale: 1.03 }] },
+  tvFocusedSmall: { borderWidth: 4, borderColor: '#000000', shadowColor: '#000000', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.75, shadowRadius: 12, elevation: 14, transform: [{ scale: 1.08 }] },
+  bottomSaveBtn: { marginTop: 16, marginBottom: 32, backgroundColor: '#111111', paddingVertical: Platform.isTV ? 24 : 18, borderRadius: 22, alignItems: 'center', borderWidth: 4, borderColor: '#111111' },
   bottomSaveBtnText: { color: '#FFFFFF', fontSize: 22, fontWeight: '900' },
   content: { padding: 20, gap: 24, paddingBottom: 48 },
   previewContainer: { alignItems: 'center', paddingVertical: 8 },
   previewButton: { width: 160, height: 160, borderRadius: 22, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 6 },
   previewImage: { borderRadius: 22 },
   overlay: { flex: 1, alignItems: 'center', justifyContent: 'flex-end', padding: 12, backgroundColor: 'transparent' },
-  previewLabelPill: { position: 'absolute', left: 10, right: 10, bottom: 10, backgroundColor: 'rgba(255,255,255,0.96)', borderWidth: 3, borderColor: '#E53935', borderRadius: 16, paddingVertical: 8, paddingHorizontal: 10, alignItems: 'center' },
+  previewLabelPill: { position: 'absolute', left: 10, right: 10, bottom: 10, backgroundColor: 'rgba(255,255,255,0.96)', borderWidth: 3, borderColor: '#000000', borderRadius: 16, paddingVertical: 8, paddingHorizontal: 10, alignItems: 'center' },
   previewEmoji: { fontSize: 44, marginBottom: 8, lineHeight: 52 },
   previewLabel: { fontSize: 18, fontWeight: '700', textAlign: 'center', lineHeight: 22 },
   field: { gap: 10 },
@@ -247,8 +248,8 @@ const styles = StyleSheet.create({
   emojiOptionSelected: { borderColor: '#1565C0', backgroundColor: '#E3F2FD' },
   emojiOptionPressed: { opacity: 0.7 },
   emojiOptionText: { fontSize: 26 },
-  colorRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  colorOption: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: 'transparent' },
+  colorRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Platform.isTV ? 18 : 12, paddingVertical: 6 },
+  colorOption: { width: Platform.isTV ? 70 : 52, height: Platform.isTV ? 70 : 52, borderRadius: Platform.isTV ? 35 : 26, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: '#111111' },
   colorOptionSelected: { borderColor: '#1A1A1A' },
   colorOptionPressed: { opacity: 0.8 },
   actionTypeList: { gap: 10 },

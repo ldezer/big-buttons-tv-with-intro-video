@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -39,7 +39,6 @@ export default function ButtonsEditor() {
   const { profileId } = useLocalSearchParams<{ profileId: string }>();
   const router = useRouter();
   const { getProfile, deleteButton, toggleFavorite } = useProfiles();
-  const [selectedLabel, setSelectedLabel] = useState('Use remote arrows. Press OK to edit buttons.');
 
   const profile = getProfile(profileId);
 
@@ -96,7 +95,7 @@ export default function ButtonsEditor() {
       <View style={styles.header}>
         <Pressable
           style={({ pressed, focused }) => [styles.headerBtn, focused && styles.tvFocused, pressed && styles.headerBtnPressed]}
-          onFocus={() => setSelectedLabel('Back')}
+         
           onPress={() => router.back()}
           accessibilityRole="button"
           accessibilityLabel="Go back"
@@ -110,7 +109,6 @@ export default function ButtonsEditor() {
         <Pressable
           style={({ pressed, focused }) => [styles.addBtn, focused && styles.tvFocused, pressed && styles.addBtnPressed]}
           hasTVPreferredFocus
-          onFocus={() => setSelectedLabel('Add Button')}
           onPress={handleAddButton}
           accessibilityRole="button"
           accessibilityLabel="Add new button"
@@ -122,7 +120,7 @@ export default function ButtonsEditor() {
       {/* Quick Packs Banner */}
       <Pressable
         style={({ pressed, focused }) => [styles.quickPacksBanner, focused && styles.tvFocused, pressed && styles.quickPacksBannerPressed]}
-        onFocus={() => setSelectedLabel('Quick Packs')}
+       
         onPress={handleQuickPacks}
         accessibilityRole="button"
         accessibilityLabel="Add buttons from quick packs"
@@ -141,7 +139,6 @@ export default function ButtonsEditor() {
           </Text>
           <Pressable
             style={({ pressed, focused }) => [styles.emptyAddBtn, focused && styles.tvFocused, pressed && styles.emptyAddBtnPressed]}
-            onFocus={() => setSelectedLabel('Add First Button')}
             onPress={handleAddButton}
           >
             <Text style={styles.emptyAddBtnText}>Add First Button</Text>
@@ -173,7 +170,6 @@ export default function ButtonsEditor() {
                 <View style={styles.buttonActions}>
                   <Pressable
                     style={({ pressed, focused }) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
-                    onFocus={() => setSelectedLabel(`${button.label} favorite`)}
                     onPress={() => handleToggleFavorite(button)}
                     accessibilityRole="button"
                     accessibilityLabel={button.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
@@ -186,7 +182,6 @@ export default function ButtonsEditor() {
                   </Pressable>
                   <Pressable
                     style={({ pressed, focused }) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
-                    onFocus={() => setSelectedLabel(`Edit ${button.label}`)}
                     onPress={() => handleEditButton(button)}
                     accessibilityRole="button"
                     accessibilityLabel={`Edit ${button.label}`}
@@ -195,7 +190,6 @@ export default function ButtonsEditor() {
                   </Pressable>
                   <Pressable
                     style={({ pressed, focused }) => [styles.actionBtn, focused && styles.tvFocusedSmall, pressed && styles.actionBtnPressed]}
-                    onFocus={() => setSelectedLabel(`Delete ${button.label}`)}
                     onPress={() => handleDeleteButton(button)}
                     accessibilityRole="button"
                     accessibilityLabel={`Delete ${button.label}`}
@@ -383,9 +377,9 @@ const styles = StyleSheet.create({
   },
   tvFocused: {
     borderWidth: 5,
-    borderColor: '#E53935',
+    borderColor: '#000000',
     transform: [{ scale: 1.04 }],
-    shadowColor: '#FFFFFF',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,
     shadowRadius: 12,
@@ -394,7 +388,7 @@ const styles = StyleSheet.create({
   tvFocusedSmall: {
     backgroundColor: '#FFFFFF',
     borderWidth: 4,
-    borderColor: '#E53935',
+    borderColor: '#000000',
     transform: [{ scale: 1.12 }],
     elevation: 12,
   },
@@ -405,7 +399,7 @@ const styles = StyleSheet.create({
     bottom: 16,
     backgroundColor: '#FFFFFF',
     borderWidth: 4,
-    borderColor: '#E53935',
+    borderColor: '#000000',
     borderRadius: 22,
     paddingVertical: 10,
     paddingHorizontal: 18,

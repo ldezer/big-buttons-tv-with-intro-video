@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   tvFocused: {
     borderWidth: 4,
-    borderColor: '#E53935',
+    borderColor: '#000000',
     transform: [{ scale: 1.03 }],
   },
   headerTitle: {

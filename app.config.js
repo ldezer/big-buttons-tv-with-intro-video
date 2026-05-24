@@ -87,6 +87,7 @@ var config = {
     plugins: [
         "expo-router",
         "./plugins/withAndroidTv",
+        "./plugins/withTVKeyEvents",
         [
             "expo-audio",
             {

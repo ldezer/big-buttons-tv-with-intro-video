@@ -9,6 +9,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { ProfilesProvider } from "@/lib/profiles-context";
 import { AppProvider } from "@/lib/app-context";
 import { ThemeProvider } from "@/lib/theme-provider";
+import { FocusProvider } from "@/lib/tv-focus/focus-manager";
 
 // Do not let the native splash get stuck forever. If any asset/provider is slow,
 // the app still shows the first screen instead of sitting on the 3-button logo.
@@ -28,13 +29,15 @@ export default function RootLayout() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <AppProvider>
             <ProfilesProvider>
-              <Stack screenOptions={{ headerShown: false, animation: Platform.isTV ? "none" : "fade" }}>
-                <Stack.Screen name="index" />
-                <Stack.Screen name="loved-one/[profileId]" />
-                <Stack.Screen name="action/choice" options={{ presentation: "modal" }} />
-                <Stack.Screen name="caregiver" />
-              </Stack>
-              <StatusBar hidden />
+              <FocusProvider>
+                <Stack screenOptions={{ headerShown: false, animation: Platform.isTV ? "none" : "fade" }}>
+                  <Stack.Screen name="index" />
+                  <Stack.Screen name="loved-one/[profileId]" />
+                  <Stack.Screen name="action/choice" options={{ presentation: "modal" }} />
+                  <Stack.Screen name="caregiver" />
+                </Stack>
+                <StatusBar hidden />
+              </FocusProvider>
             </ProfilesProvider>
           </AppProvider>
         </GestureHandlerRootView>

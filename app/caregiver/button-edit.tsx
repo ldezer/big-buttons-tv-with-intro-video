@@ -8,6 +8,8 @@ import { BUTTON_COLORS, ButtonActionType, BigButton } from '@/lib/types';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { BUTTON_ART_OPTIONS, cleanImageUri, getBundledButtonArt } from '@/lib/art';
 import { TVPressable, tvFocusStyles } from '@/components/tv/tv-pressable';
+import { StickySaveBar } from '@/components/tv/sticky-save-bar';
+import { useMenuKey } from '@/lib/tv-focus/focus-manager';
 
 const BUTTON_EMOJIS = [
   '🐕', '🐈', '🐦', '🐟', '🐎', '🐰', '🦁', '🐸',
@@ -108,6 +110,9 @@ export default function ButtonEditScreen() {
     Alert.alert('Saved', 'Button saved.', [{ text: 'Done', onPress: () => router.back() }]);
   };
 
+  // Hardware MENU button on Android TV / Fire TV remotes saves directly.
+  useMenuKey(() => { if (canSave) handleSave(); });
+
   const SaveButton = ({ bottom = false }: { bottom?: boolean }) => (
     <TVPressable
       style={({ pressed, focused }: any) => [bottom ? styles.bottomSaveBtn : styles.saveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed, !canSave && styles.saveDisabled]}
@@ -131,7 +136,7 @@ export default function ButtonEditScreen() {
         <SaveButton />
       </View>
 
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator>
+      <ScrollView contentContainerStyle={[styles.content, styles.contentWithStickyBar]} showsVerticalScrollIndicator>
         <View style={styles.previewContainer}>
           {previewSource ? (
             <ImageBackground source={previewSource} imageStyle={styles.previewImage} style={[styles.previewButton, { backgroundColor: '#FFFFFF' }]} resizeMode="cover">
@@ -221,6 +226,12 @@ export default function ButtonEditScreen() {
 
         <SaveButton bottom />
       </ScrollView>
+      <StickySaveBar
+        label="Save Button"
+        onPress={handleSave}
+        disabled={!canSave}
+        hint={canSave ? 'Press the MENU button on your remote to save.' : 'Add a label and action to enable Save.'}
+      />
     </ScreenContainer>
   );
 }
@@ -236,6 +247,7 @@ const styles = StyleSheet.create({
   bottomSaveBtn: { marginTop: 18, marginBottom: 42, backgroundColor: '#111111', paddingVertical: Platform.isTV ? 28 : 18, borderRadius: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: '#111111', flexDirection: 'row', gap: 12 },
   bottomSaveBtnText: { color: '#FFFFFF', fontSize: Platform.isTV ? 28 : 22, fontWeight: '900' },
   content: { padding: Platform.isTV ? 34 : 20, gap: Platform.isTV ? 28 : 24, paddingBottom: 56 },
+  contentWithStickyBar: { paddingBottom: Platform.isTV ? 200 : 140 },
   previewContainer: { alignItems: 'center', paddingVertical: 8 },
   previewButton: { width: Platform.isTV ? 190 : 160, height: Platform.isTV ? 190 : 160, borderRadius: 24, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 6 },
   previewImage: { borderRadius: 24 }, previewLabelPill: { position: 'absolute', left: 10, right: 10, bottom: 10, backgroundColor: 'rgba(255,255,255,0.96)', borderWidth: 3, borderColor: '#000000', borderRadius: 16, paddingVertical: 8, paddingHorizontal: 10, alignItems: 'center' },

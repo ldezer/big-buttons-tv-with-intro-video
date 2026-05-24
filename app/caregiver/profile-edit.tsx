@@ -7,6 +7,8 @@ import { useProfiles } from '@/lib/profiles-context';
 import { useApp } from '@/lib/app-context';
 import { PROFILE_COLORS, ProfileSettings, FontSize, ColumnCount } from '@/lib/types';
 import { TVPressable, tvFocusStyles } from '@/components/tv/tv-pressable';
+import { StickySaveBar } from '@/components/tv/sticky-save-bar';
+import { useMenuKey } from '@/lib/tv-focus/focus-manager';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { PROFILE_AVATAR_OPTIONS, PROFILE_BANNER_OPTIONS, cleanImageUri, getBundledProfileArt } from '@/lib/art';
 
@@ -68,6 +70,9 @@ export default function ProfileEditScreen() {
 
   const handleDelete = () => Alert.alert('Delete Profile', `Are you sure you want to delete "${existing?.name}"? All buttons will be removed.`, [{ text: 'Cancel', style: 'cancel' }, { text: 'Delete', style: 'destructive', onPress: () => { deleteProfile(profileId!); router.back(); } }]);
 
+  // Hardware MENU button on Android TV / Fire TV remotes saves directly.
+  useMenuKey(() => { if (canSave) handleSave(); });
+
   const SaveButton = ({ bottom = false }: { bottom?: boolean }) => (
     <TVPressable
       style={({ pressed, focused }: any) => [bottom ? styles.bottomSaveBtn : styles.saveBtn, focused && styles.tvFocused, pressed && styles.saveBtnPressed, !canSave && styles.saveDisabled]}
@@ -91,7 +96,7 @@ export default function ProfileEditScreen() {
         <SaveButton />
       </View>
 
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator>
+      <ScrollView contentContainerStyle={[styles.content, styles.contentWithStickyBar]} showsVerticalScrollIndicator>
         <View style={styles.previewContainer}>
           {bannerSource ? <ImageBackground source={bannerSource} style={styles.previewBanner} imageStyle={styles.previewBannerImage}><View style={styles.previewShade}>{avatarSource ? <ImageBackground source={avatarSource} style={styles.previewAvatar} imageStyle={styles.previewAvatarInner} /> : <View style={[styles.previewAvatarFallback, { backgroundColor: color }]}><Text style={styles.previewEmoji}>{emoji}</Text></View>}<Text style={styles.previewNameBanner}>{name || 'Name'}</Text></View></ImageBackground> : <View style={styles.previewRow}>{avatarSource ? <ImageBackground source={avatarSource} style={styles.previewAvatar} imageStyle={styles.previewAvatarInner} /> : <View style={[styles.previewAvatarFallback, { backgroundColor: color }]}><Text style={styles.previewEmoji}>{emoji}</Text></View>}<Text style={[styles.previewName, { color }]}>{name || 'Name'}</Text></View>}
         </View>
@@ -119,6 +124,12 @@ export default function ProfileEditScreen() {
         {existing && <TVPressable style={({ pressed, focused }: any) => [styles.deleteButton, focused && styles.tvFocused, pressed && styles.deleteButtonPressed]} onPress={handleDelete}><IconSymbol name="trash.fill" size={18} color="#D32F2F" /><Text style={styles.deleteButtonText}>Delete Profile</Text></TVPressable>}
         <SaveButton bottom />
       </ScrollView>
+      <StickySaveBar
+        label="Save Profile"
+        onPress={handleSave}
+        disabled={!canSave}
+        hint={canSave ? 'Press the MENU button on your remote to save.' : 'Add a name and make changes to enable Save.'}
+      />
     </ScreenContainer>
   );
 }
@@ -131,6 +142,7 @@ const styles = StyleSheet.create({
   saveBtn: { minWidth: Platform.isTV ? 230 : 120, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: '#111111', paddingVertical: Platform.isTV ? 18 : 10, paddingHorizontal: 22, borderRadius: 18, borderWidth: 4, borderColor: '#111111' },
   saveBtnPressed: { opacity: 0.8 }, saveBtnText: { fontSize: Platform.isTV ? 22 : 16, fontWeight: '900', color: '#FFFFFF' }, saveDisabled: { backgroundColor: '#999999', borderColor: '#999999', opacity: 0.45 },
   content: { padding: Platform.isTV ? 34 : 20, gap: Platform.isTV ? 28 : 24, paddingBottom: 56 },
+  contentWithStickyBar: { paddingBottom: Platform.isTV ? 200 : 140 },
   previewContainer: { paddingVertical: 8 }, previewRow: { flexDirection: 'row', alignItems: 'center', gap: 18, justifyContent: 'center' }, previewBanner: { minHeight: Platform.isTV ? 154 : 132, borderRadius: 24, overflow: 'hidden' }, previewBannerImage: { borderRadius: 24 }, previewShade: { flex: 1, backgroundColor: 'rgba(0,0,0,0.28)', flexDirection: 'row', alignItems: 'center', gap: 18, padding: 20 }, previewAvatar: { width: 86, height: 86, borderRadius: 26, overflow: 'hidden' }, previewAvatarInner: { borderRadius: 26 }, previewAvatarFallback: { width: 86, height: 86, borderRadius: 26, alignItems: 'center', justifyContent: 'center' }, previewEmoji: { fontSize: 42 }, previewName: { fontSize: Platform.isTV ? 36 : 28, fontWeight: '900' }, previewNameBanner: { fontSize: Platform.isTV ? 36 : 28, fontWeight: '900', color: '#FFFFFF' },
   field: { gap: 12 }, label: { fontSize: Platform.isTV ? 22 : 16, fontWeight: '800', color: '#1A1A1A' }, help: { fontSize: Platform.isTV ? 16 : 13, color: '#757575' }, input: { borderWidth: 3, borderColor: '#DADCE0', borderRadius: 16, padding: Platform.isTV ? 20 : 14, fontSize: Platform.isTV ? 24 : 18, color: '#1A1A1A', backgroundColor: '#FAFAFA' }, inputFocused: { borderWidth: 7, borderColor: '#000000', backgroundColor: '#FFFFFF' },
   emojiRow: { gap: 12, paddingVertical: 8 }, emojiOption: { width: Platform.isTV ? 70 : 52, height: Platform.isTV ? 70 : 52, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F5F5', borderWidth: 3, borderColor: '#DADCE0' }, emojiOptionSelected: { borderColor: '#1565C0', backgroundColor: '#E3F2FD' }, emojiOptionPressed: { opacity: 0.7 }, emojiOptionText: { fontSize: Platform.isTV ? 36 : 26 },
